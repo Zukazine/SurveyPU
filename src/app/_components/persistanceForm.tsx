@@ -5,6 +5,8 @@ import { FaChevronDown } from 'react-icons/fa';
 import DatePicker from './datePicker';
 import ShortField from './shortField';
 import JudulEpic from './judulEpic';
+import DropSelect from './dropSelect';
+import { provinces, kawasanPrior } from '../../../public/data'
 
 const FormWithPersistence: React.FC = () => {
 	const [drop, setDrop] = useState<boolean>(false);
@@ -52,44 +54,9 @@ const FormWithPersistence: React.FC = () => {
 				<div className='flex flex-col gap-2'>
 					<DatePicker />
 					<ShortField title='Nama Surveyor'/>
-					<div className='flex flex-col gap-2 bg-white border border-violet-500/50 rounded-lg px-4 py-4'>
-						<p className='font-semibold'>Provinsi <span className='text-red-600'>*</span></p>
-						<select 
-							id='provinsi-selection'
-							value={dropdown} 
-							onChange={(e) => setDropdown(e.target.value)} 
-							required={true}
-							className='border border-indigo-500/30 rounded-md outline-indigo-500 px-3 py-2 text-sm hover:border-indigo-500/80 '
-						>
-							<option key="DEFAULT" value='DEFAULT' disabled>Pilih Provinsi</option>
-							{
-							provinces.map((prov) => { return (
-								<>
-									<option key={prov.id} value={prov.nama}>{prov.nama}</option>
-								</>)
-								})
-							}
-						</select>
-					</div>
-					{/* <div className='flex flex-col gap-2 bg-white border border-violet-500/50 rounded-lg px-4 py-4'>
-						<p className='font-semibold'>Kawasan Prioritas <span className='text-red-600'>*</span></p>
-						<select 
-							id='kawasan-selection'
-							value={dropdown} 
-							onChange={(e) => setDropdown(e.target.value)} 
-							required={true}
-							className='border border-indigo-500/30 rounded-md outline-indigo-500 px-3 py-2 text-sm hover:border-indigo-500/80 '
-						>
-							<option key={JSON.stringify({id: 0, nama:'kawasan'})} value='DEFAULT' disabled>Pilih Kawasan</option>
-							{
-							kawasanPrior.map((item) => { return (
-								<>
-									<option key={JSON.stringify(item)} value={item.nama}>{item.nama}</option>
-								</>)
-								})
-							}
-						</select>
-					</div> */}
+					<DropSelect title='Provinsi' processedArray={provinces}/>
+					<DropSelect title='Kawasan Prioritas' processedArray={kawasanPrior}/>
+					
 					<div className='flex flex-col gap-2 bg-white border border-violet-500/50 rounded-lg px-4 py-4 w-full'>
 						<div className='flex justify-between items-center'>
 							<p className='font-semibold'>Biaya <span className='text-red-600'>*</span></p>
@@ -130,7 +97,7 @@ const FormWithPersistence: React.FC = () => {
 						
 						<div>
 							{/* @ts-ignore */}
-							<button type='button' className='w-[120px] h-[30px] border text-sm bg-indigo-500 text-white transition-all shadow-[1.5px_1.5px_0px_black] hover:shadow-none hover:translate-x-[1.5px] hover:translate-y-[1.5px]' onClick={() => {document.getElementById('getFile').click()}}>Upload Foto</button>
+							<button type='button' className='w-32 h-[30px] border text-sm bg-indigo-500 text-white transition-all shadow-[1.5px_1.5px_0px_black] hover:shadow-none hover:translate-x-[1.5px] hover:translate-y-[1.5px]' onClick={() => {document.getElementById('getFile').click()}}>Upload Foto</button>
 							<input id='getFile' type="file" multiple onChange={handleFileChange} className='hidden'/>
 						</div>
 						<div className='flex flex-col mt-2 border-t-2 border-indigo-500/50'>
@@ -157,51 +124,3 @@ const FormWithPersistence: React.FC = () => {
 };
 
 export default FormWithPersistence;
-
-const provinces = [
-  { id: 1, nama: 'Aceh' },
-  { id: 2, nama: 'Bali' },
-  { id: 3, nama: 'Banten' },
-  { id: 4, nama: 'Bengkulu' },
-  { id: 5, nama: 'DI Yogyakarta' },
-  { id: 6, nama: 'DKI Jakarta' },
-  { id: 7, nama: 'Gorontalo' },
-  { id: 8, nama: 'Jambi' },
-  { id: 9, nama: 'Jawa Barat' },
-  { id: 10, nama: 'Jawa Tengah' },
-  { id: 11, nama: 'Jawa Timur' },
-  { id: 12, nama: 'Kalimantan Barat' },
-  { id: 13, nama: 'Kalimantan Selatan' },
-  { id: 14, nama: 'Kalimantan Tengah' },
-  { id: 15, nama: 'Kalimantan Timur' },
-  { id: 16, nama: 'Kalimantan Utara' },
-  { id: 17, nama: 'Kepulauan Bangka Belitung' },
-  { id: 18, nama: 'Kepulauan Riau' },
-  { id: 19, nama: 'Lampung' },
-  { id: 20, nama: 'Maluku' },
-  { id: 21, nama: 'Maluku Utara' },
-  { id: 22, nama: 'Nusa Tenggara Barat' },
-  { id: 23, nama: 'Nusa Tenggara Timur' },
-  { id: 24, nama: 'Papua' },
-  { id: 25, nama: 'Papua Barat' },
-  { id: 26, nama: 'Papua Barat Daya' },
-  { id: 27, nama: 'Papua Pegunungan' },
-  { id: 28, nama: 'Papua Selatan' },
-  { id: 29, nama: 'Papua Tengah' },
-  { id: 30, nama: 'Riau' },
-  { id: 31, nama: 'Sulawesi Barat' },
-  { id: 32, nama: 'Sulawesi Selatan' },
-  { id: 33, nama: 'Sulawesi Tengah' },
-  { id: 34, nama: 'Sulawesi Tenggara' },
-  { id: 35, nama: 'Sulawesi Utara' },
-  { id: 36, nama: 'Sumatera Barat' },
-  { id: 37, nama: 'Sumatera Selatan' },
-  { id: 38, nama: 'Sumatera Utara' }
-];
-
-const kawasanPrior = [
-  { id: 1, nama: 'Kawasan A' },
-  { id: 2, nama: 'Kawasan B' },
-  { id: 3, nama: 'Kawasan C' },
-  { id: 4, nama: 'Kawasan D' },
-]

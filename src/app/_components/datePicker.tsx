@@ -24,7 +24,7 @@ const DatePicker = () => {
 					type="date"
 					value={date}
 					onChange={(e) => setDate(e.target.value)}
-					className='max-w-40 bg-indigo-500 px-2 text-white text-sm py-[1px]  transition-all shadow-[1.5px_1.5px_0px_black] hover:shadow-none hover:translate-x-[1.5px] hover:translate-y-[1.5px] outline-white focus:bg-white focus:outline-indigo-500 focus:text-black cursor-pointer focus:cursor-text'
+					className='max-w-32 bg-indigo-500 px-2 py-1 text-white text-sm transition-all shadow-[1.5px_1.5px_0px_black] hover:shadow-none hover:translate-x-[1.5px] hover:translate-y-[1.5px] outline-white focus:bg-white focus:outline-indigo-500 focus:text-black cursor-pointer focus:cursor-text'
 				/>
 			</div>
 		</>

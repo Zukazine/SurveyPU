@@ -16,16 +16,6 @@
   }
 }
 
-/* body {
-  color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
-} */
-
 @layer utilities {
   .text-balance {
     text-wrap: balance;
@@ -61,4 +51,29 @@ select {
   border: 1px solid #ccc;
   /* padding: 0.5rem; */
   border-radius: 0;
+}
+
+/* SCROLLBAR */
+/* width */
+.myscrollbar::-webkit-scrollbar {
+  width: 8px;
+  right: 0;
+}
+
+/* Track */
+.myscrollbar::-webkit-scrollbar-track {
+  @apply bg-white
+}
+
+/* Handle */
+.myscrollbar::-webkit-scrollbar-thumb {
+  @apply bg-orange-400
+}
+
+/* background: #222222; */
+/* border-radius: 2px; */
+
+/* Handle on hover */
+.myscrollbar::-webkit-scrollbar-thumb:hover {
+  @apply bg-orange-300
 }
