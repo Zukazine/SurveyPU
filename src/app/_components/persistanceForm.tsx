@@ -1,17 +1,16 @@
 'use client'
 
-import { motion, AnimatePresence } from 'framer-motion';
 import React, { useState, useEffect, useCallback } from 'react';
 import { FaChevronDown } from 'react-icons/fa';
+import DatePicker from './datePicker';
 
 const FormWithPersistence: React.FC = () => {
 	const [drop, setDrop] = useState<boolean>(false);
 
-  const [date, setDate] = useState<string>('');
   const [shortInput, setShortInput] = useState<string>('');
   const [dropdown, setDropdown] = useState<string>('');
   const [textInput, setTextInput] = useState<string>('');
-  const [file, setFile] = useState<File | null>(null);
+	const [files, setFiles] = useState<File[]>([]);
 
   useEffect(() => {
     const storedDate = localStorage.getItem('date');
@@ -19,7 +18,6 @@ const FormWithPersistence: React.FC = () => {
     const storedDropdown = localStorage.getItem('dropdown');
     const storedTextInput = localStorage.getItem('textInput');
 
-    if (storedDate) setDate(storedDate);
     if (storedShortInput) setShortInput(storedShortInput);
     if (storedDropdown) setDropdown(storedDropdown);
     if (storedTextInput) setTextInput(storedTextInput);
@@ -27,40 +25,35 @@ const FormWithPersistence: React.FC = () => {
 
   // Save values to localStorage whenever they change
   useEffect(() => {
-    localStorage.setItem('date', date);
     localStorage.setItem('shortInput', shortInput);
     localStorage.setItem('dropdown', dropdown);
     localStorage.setItem('textInput', textInput);
-  }, [date, shortInput, dropdown, textInput]);
+  }, [shortInput, dropdown, textInput]);
+
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    if (event.target.files && event.target.files[0]) {
-      setFile(event.target.files[0]);
-    }
+    const selectedFiles = Array.from(event.target.files || []);
+    setFiles(selectedFiles);
   };
 
   const handleSubmit = (event: React.FormEvent) => {
-    event.preventDefault();
-    // Handle form submission logic here
-    console.log({ date, shortInput, dropdown, textInput, file });
-    alert('Form submitted successfully');
+
+		if (files.length === 0) {
+			console.log('Kurang File OI');
+		} else {
+			event.preventDefault();
+			// Handle form submission logic here
+			console.log({ shortInput, dropdown, textInput, files });
+			alert('Form submitted successfully');
+		}
   };
 
   return (
     <div className='flex py-10 justify-center h-fit w-full bg-gradient-to-br from-violet-600 to-sky-400'>
-			<form onSubmit={handleSubmit} className='bg-[#FDFDFD] flex flex-col px-8 py-8 rounded-2xl h-fit'>
-				<div className='text-4xl font-mono font-black text-black mb-5'>Form Survey Darurat</div>
+			<form onSubmit={handleSubmit} className='bg-[#FDFDFD] flex flex-col px-8 py-8 rounded-2xl h-fit w-[500px] max-w-[550px] overflow-hidden'>
+				<div className='text-4xl font-mono font-black text-black mb-6'><span className='selection:text-indigo-500'>Form Survey </span><span className='selection:text-red-400'>Darurat</span></div>
 				<div className='flex flex-col gap-2'>
-					<div className='flex flex-col gap-2 bg-white border border-violet-500/50 rounded-lg px-4 py-4'>
-							<p className='font-semibold'>Tanggal Survey <span className='text-red-600'>*</span> <span className='pl-1 bg-white text-xs font-normal'>{`(klik icon kalender)`}</span></p>
-							<input
-									required={true}
-									type="date"
-									value={date}
-									onChange={(e) => setDate(e.target.value)}
-									className='max-w-40 bg-indigo-500 px-2 text-white text-sm py-[1px] rounded-[5px] transition-all shadow-[1.5px_1.5px_0px_black] hover:shadow-none hover:translate-x-[1.5px] hover:translate-y-[1.5px] outline-white focus:bg-white focus:outline-indigo-500 focus:text-black'
-							/>
-					</div>
+					<DatePicker />
 					<div className='flex flex-col gap-2 bg-white border border-violet-500/50 rounded-lg px-4 py-4'>
 						<p className='font-semibold'>Nama Surveyor <span className='text-red-600'>*</span></p>
 						<input
@@ -81,35 +74,35 @@ const FormWithPersistence: React.FC = () => {
 							required={true}
 							className='border border-indigo-500/30 rounded-md outline-indigo-500 px-3 py-2 text-sm hover:border-indigo-500/80 '
 						>
-							<option value="" disabled selected>Pilih Provinsi</option>
+							<option key="DEFAULT" value='DEFAULT' disabled>Pilih Provinsi</option>
 							{
 							provinces.map((prov) => { return (
 								<>
-									<option value={prov.nama}>{prov.nama}</option>
+									<option key={prov.id} value={prov.nama}>{prov.nama}</option>
 								</>)
 								})
 							}
 						</select>
 					</div>
-					<div className='flex flex-col gap-2 bg-white border border-violet-500/50 rounded-lg px-4 py-4'>
+					{/* <div className='flex flex-col gap-2 bg-white border border-violet-500/50 rounded-lg px-4 py-4'>
 						<p className='font-semibold'>Kawasan Prioritas <span className='text-red-600'>*</span></p>
 						<select 
-							id='provinsi-selection'
+							id='kawasan-selection'
 							value={dropdown} 
 							onChange={(e) => setDropdown(e.target.value)} 
 							required={true}
 							className='border border-indigo-500/30 rounded-md outline-indigo-500 px-3 py-2 text-sm hover:border-indigo-500/80 '
 						>
-							<option value="" disabled selected>Pilih Kawasan</option>
+							<option key={JSON.stringify({id: 0, nama:'kawasan'})} value='DEFAULT' disabled>Pilih Kawasan</option>
 							{
 							kawasanPrior.map((item) => { return (
 								<>
-									<option value={item.nama}>{item.nama}</option>
+									<option key={JSON.stringify(item)} value={item.nama}>{item.nama}</option>
 								</>)
 								})
 							}
 						</select>
-					</div>
+					</div> */}
 					<div className='flex flex-col gap-2 bg-white border border-violet-500/50 rounded-lg px-4 py-4 w-full'>
 						<div className='flex justify-between items-center'>
 							<p className='font-semibold'>Biaya <span className='text-red-600'>*</span></p>
@@ -145,13 +138,30 @@ const FormWithPersistence: React.FC = () => {
 							placeholder='Contoh : 10.000.000.000'
 						/>
 					</div>
-					<div>
-							<label>
-							File Upload:
-							<input type="file" multiple accept="image/jpeg, image/png" onChange={handleFileChange} />
-							</label>
+					<div className='flex flex-col gap-2 bg-white border border-violet-500/50 rounded-lg px-4 py-4 w-full'>
+						<p className='font-semibold'>Dokumentasi <span className='text-red-600'>*</span></p>
+						
+						<div>
+							{/* @ts-ignore */}
+							<button type='button' className='w-[120px] h-[30px] border text-sm bg-indigo-500 text-white transition-all shadow-[1.5px_1.5px_0px_black] hover:shadow-none hover:translate-x-[1.5px] hover:translate-y-[1.5px]' onClick={() => {document.getElementById('getFile').click()}}>Upload Foto</button>
+							<input id='getFile' type="file" multiple onChange={handleFileChange} className='hidden'/>
+						</div>
+						<div className='flex flex-col mt-2 border-t-2 border-indigo-500/50'>
+							<h3 className='py-2 text-[15px] font-semibold'>Uploaded Files :</h3>
+							{files.length ? 
+								<ul className='flex gap-2'>
+								{files.map((file, index) => (
+									<li key={index} className='bg-indigo-500 text-white p-1 rounded-sm text-xs'>{file.name}</li>
+								))}
+								</ul> 
+							: 
+								<div className='flex'>
+									<p className='border border-gray-300 text-black p-1 rounded-sm text-xs'>Belum ada file yang diupload</p>
+								</div>
+							}
+						</div>
 					</div>
-						<button type="submit" className='px-6 py-2 mr-3 mt-7 font-medium bg-indigo-500 text-white w-fit transition-all shadow-[3px_3px_0px_black] hover:shadow-none hover:translate-x-[3px] hover:translate-y-[3px] self-end'>Submit</button>
+					<button type="submit" className='px-6 py-2 mr-3 mt-7 font-medium bg-indigo-500 text-white w-fit transition-all shadow-[3px_3px_0px_black] hover:shadow-none hover:translate-x-[3px] hover:translate-y-[3px] self-end'>Submit</button>
 				</div>
 			</form>
     </div>
