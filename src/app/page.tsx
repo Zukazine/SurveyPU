@@ -1,9 +1,11 @@
 'use client'
 
-import React, { useState, ChangeEvent, FormEvent } from 'react';
+import React, { useState, ChangeEvent, FormEvent, useEffect } from 'react';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import moment from 'moment';
+import MapDraw from './_components/mapdraw';
+import FormWithPersistence from './_components/persistanceForm';
 
 export default function Home() {
   const [formData, setFormData] = useState({
@@ -48,7 +50,11 @@ export default function Home() {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
+    <>
+    <FormWithPersistence />
+    {/* <form onSubmit={handleSubmit}>
+      
+
       <div>
         <label>Date:</label>
         <DatePicker
@@ -96,7 +102,10 @@ export default function Home() {
         />
       </div>
       <button type="submit">Submit</button>
-    </form>
+      <div>roti</div>
+      
+    </form> */}
+      {/* <MapDraw /> */}
+    </>
   );
-
 }
