@@ -3,32 +3,29 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { FaChevronDown } from 'react-icons/fa';
 import DatePicker from './datePicker';
+import ShortField from './shortField';
+import JudulEpic from './judulEpic';
 
 const FormWithPersistence: React.FC = () => {
 	const [drop, setDrop] = useState<boolean>(false);
 
-  const [shortInput, setShortInput] = useState<string>('');
   const [dropdown, setDropdown] = useState<string>('');
   const [textInput, setTextInput] = useState<string>('');
 	const [files, setFiles] = useState<File[]>([]);
 
   useEffect(() => {
-    const storedDate = localStorage.getItem('date');
-    const storedShortInput = localStorage.getItem('shortInput');
     const storedDropdown = localStorage.getItem('dropdown');
     const storedTextInput = localStorage.getItem('textInput');
 
-    if (storedShortInput) setShortInput(storedShortInput);
     if (storedDropdown) setDropdown(storedDropdown);
     if (storedTextInput) setTextInput(storedTextInput);
   }, []);
 
   // Save values to localStorage whenever they change
   useEffect(() => {
-    localStorage.setItem('shortInput', shortInput);
     localStorage.setItem('dropdown', dropdown);
     localStorage.setItem('textInput', textInput);
-  }, [shortInput, dropdown, textInput]);
+  }, [dropdown, textInput]);
 
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -43,7 +40,7 @@ const FormWithPersistence: React.FC = () => {
 		} else {
 			event.preventDefault();
 			// Handle form submission logic here
-			console.log({ shortInput, dropdown, textInput, files });
+			console.log({ dropdown, textInput, files });
 			alert('Form submitted successfully');
 		}
   };
@@ -51,20 +48,10 @@ const FormWithPersistence: React.FC = () => {
   return (
     <div className='flex py-10 justify-center h-fit w-full bg-gradient-to-br from-violet-600 to-sky-400'>
 			<form onSubmit={handleSubmit} className='bg-[#FDFDFD] flex flex-col px-8 py-8 rounded-2xl h-fit w-[500px] max-w-[550px] overflow-hidden'>
-				<div className='text-4xl font-mono font-black text-black mb-6'><span className='selection:text-indigo-500'>Form Survey </span><span className='selection:text-red-400'>Darurat</span></div>
+				<JudulEpic textNormal='Form Survey' textEmergency='Darurat'/>
 				<div className='flex flex-col gap-2'>
 					<DatePicker />
-					<div className='flex flex-col gap-2 bg-white border border-violet-500/50 rounded-lg px-4 py-4'>
-						<p className='font-semibold'>Nama Surveyor <span className='text-red-600'>*</span></p>
-						<input
-							required={true}
-							type="text"
-							value={shortInput}
-							onChange={(e) => setShortInput(e.target.value)}
-							placeholder='e.g. Ilham Maulana'
-							className='border border-indigo-500/30 rounded-md outline-indigo-500 px-2 py-2 text-sm'
-						/>
-					</div>
+					<ShortField title='Nama Surveyor'/>
 					<div className='flex flex-col gap-2 bg-white border border-violet-500/50 rounded-lg px-4 py-4'>
 						<p className='font-semibold'>Provinsi <span className='text-red-600'>*</span></p>
 						<select 
