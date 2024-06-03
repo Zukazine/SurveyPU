@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 
+
 const DatePicker = () => {
 	const [date, setDate] = useState<string>('');
 	
@@ -17,8 +18,8 @@ const DatePicker = () => {
 
 	return ( 
 		<>
-			<div className='flex flex-col gap-2 bg-white border border-violet-500/50 rounded-lg px-4 py-4 w-full max-w-[450px] overflow-hidden'>
-				<p className='font-semibold w-full text-wrap'><span className='selection:text-indigo-500'>Tanggal Survey </span><span className='text-red-600 selection:text-red-600'>* </span><span className='pl-1 bg-white text-xs font-normal selection:text-orange-500/90'>{`(klik icon kalender)`}</span></p>
+			<div className='flex flex-col gap-2 bg-white border border-violet-500/50 rounded-lg px-2 py-3 sm:px-4 sm:py-4 w-full max-w-[600px] overflow-hidden'>
+				<p className='font-semibold w-full text-wrap sm:text-lg mb-1'><span className='selection:text-indigo-500'>Tanggal Survey </span><span className='text-red-600 selection:text-red-600'>* </span><span className='pl-1 bg-white text-xs font-normal selection:text-orange-500/90'>{`(klik icon kalender)`}</span></p>
 				<input
 					required={true}
 					type="date"

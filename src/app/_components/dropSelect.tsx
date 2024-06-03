@@ -26,14 +26,14 @@ const DropSelect : React.FC<SelectorProps> = ({title, processedArray}) => {
 
 	return ( 
 		<>
-			<div className='flex flex-col gap-2 bg-white border border-violet-500/50 rounded-lg px-4 py-4'>
-				<p className='font-semibold'>{title} <span className='text-red-600'>*</span></p>
+			<div className='flex flex-col gap-2 bg-white border border-violet-500/50 rounded-lg px-2 py-3 sm:px-4 sm:py-4 w-full max-w-[600px] overflow-hidden '>
+				<p className='font-semibold w-full text-wrap sm:text-lg mb-1'>{title} <span className='text-red-600'>*</span></p>
 				<select 
 					id='provinsi-selection'
 					value={dropdown} 
 					onChange={(e) => setDropdown(e.target.value)} 
 					required={true}
-					className='border border-indigo-500/30 rounded-md outline-indigo-500 px-3 py-2 text-sm hover:border-indigo-500/80 '
+					className='border border-indigo-500/30 rounded-md outline-indigo-500 px-2 sm:px-3 py-1 sm:py-2 text-xs sm:text-sm hover:border-indigo-500/80 w-full text-wrap'
 				>
 					<option key="DEFAULT" value='DEFAULT' disabled>Pilih {title}</option>
 					{
