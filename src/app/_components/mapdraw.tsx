@@ -14,7 +14,8 @@ mapboxgl.accessToken = 'pk.eyJ1IjoienVrYXppbmUiLCJhIjoiY2x3ZzZhZnBlMDFqczJqbzc4c
 const MapDraw: React.FC = () => {
     const mapContainerRef = useRef<HTMLDivElement>(null);
 		const mapRef = useRef<mapboxgl.Map | null>(null);
-		const [geoJsonData, setGeoJsonData] = useState<GeoJSON.FeatureCollection<GeoJSON.Geometry>>({
+		const [is500px, setIs500px] = useState(window.matchMedia("(max-width: 500px)").matches);
+    const [geoJsonData, setGeoJsonData] = useState<GeoJSON.FeatureCollection<GeoJSON.Geometry>>({
 			type: 'FeatureCollection',
 			features: [],
 		});
@@ -99,22 +100,48 @@ const MapDraw: React.FC = () => {
 		}
 		};
 
+  useEffect(() => {
+    const mediaQuery = window.matchMedia("(max-width: 640px)");
+
+    // @ts-ignore
+    const handleMediaQueryChange = (e) => {
+      setIs500px(e.matches);
+    };
+
+    mediaQuery.addEventListener('change', handleMediaQueryChange);
+
+    return () => {
+      mediaQuery.removeEventListener('change', handleMediaQueryChange);
+    };
+  }, []);  
+
 	return (
 		<div>
 			<div ref={mapContainerRef} style={{ width: '100%', height: '500px' }} />
 			<div>
-        <label htmlFor="mapStyle">Select Map Style:</label>
-        <select id="mapStyle" onChange={handleStyleChange}>
+        <p className='font-semibold w-full text-wrap text-md mb-3 mt-3'>Ganti Style Peta</p>
+        <select id="mapStyle" onChange={handleStyleChange} className='border border-indigo-500/30 rounded-md outline-indigo-500 px-2 sm:px-3 py-1 sm:py-2 text-xs sm:text-sm hover:border-indigo-500/80 w-full text-wrap'>
           <option value="streets-v11">Streets</option>
           <option value="satellite-v9">Satellite</option>
           <option value="light-v10">Light</option>
-          {/* Add more options as needed */}
         </select>
       </div>
-			<pre>{JSON.stringify(geoJsonData, null, 2)}</pre>
+      <p className='font-semibold w-full text-wrap text-md mb-3 mt-4'>Preview Data Spasial </p>
+      <div className='flex border border-indigo-500/50 rounded-lg max-h-[500px] overflow-y-scroll myscrollbar-child'>
+        {is500px ? (
+        <div>
+          <p className='m-5 pb-5 text-sm text-wrap'>{JSON.stringify(geoJsonData, null, 2)}</p>
+        </div>
+      ) : (
+        <div>
+          <pre className='m-5 pb-5 text-sm'>{JSON.stringify(geoJsonData, null, 2)}</pre>
+        </div>
+      )}
+      </div>
 		</div>
+    
 	);
 };
   
-  export default MapDraw;
+export default MapDraw;
   

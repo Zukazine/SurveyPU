@@ -77,3 +77,28 @@ select {
 .myscrollbar::-webkit-scrollbar-thumb:hover {
   @apply bg-orange-300
 }
+
+/* SCROLLBAR */
+/* width */
+.myscrollbar-child::-webkit-scrollbar {
+  width: 4px;
+  right: 5;
+}
+
+/* Track */
+.myscrollbar-child::-webkit-scrollbar-track {
+  @apply bg-gray-300 rounded-full
+}
+
+/* Handle */
+.myscrollbar-child::-webkit-scrollbar-thumb {
+  @apply bg-indigo-400 rounded-full
+}
+
+/* background: #222222; */
+/* border-radius: 2px; */
+
+/* Handle on hover */
+.myscrollbar-child::-webkit-scrollbar-thumb:hover {
+  @apply bg-orange-300
+}

@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, ChangeEvent } from "react";
 
 type ArrayObj = {
 	id: number;
@@ -10,19 +10,27 @@ type ArrayObj = {
 type SelectorProps = {
 	title : string;
 	processedArray : ArrayObj[];
+	onChange : (input: string) => void;
 }
 
-const DropSelect : React.FC<SelectorProps> = ({title, processedArray}) => {
+const DropSelect : React.FC<SelectorProps> = ({title, processedArray, onChange}) => {
 	const [dropdown, setDropdown] = useState<string>('');
 
 	useEffect(() => {
-    const storedDropdown = localStorage.getItem('dropdown');
+    const storedDropdown = localStorage.getItem(`dropdown-${title}`);
     if (storedDropdown) setDropdown(storedDropdown);
   }, []);
 
 	useEffect(() => {
-    localStorage.setItem('dropdown', dropdown);
+    localStorage.setItem(`dropdown-${title}`, dropdown);
   }, [dropdown]);
+
+	const handleInputChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+		const newSelection = e.target.value;
+		setDropdown(newSelection);
+		localStorage.setItem(`dropdown-${title}`, newSelection);
+		onChange(newSelection);
+	}
 
 	return ( 
 		<>
@@ -31,13 +39,15 @@ const DropSelect : React.FC<SelectorProps> = ({title, processedArray}) => {
 				<select 
 					id='provinsi-selection'
 					value={dropdown} 
-					onChange={(e) => setDropdown(e.target.value)} 
+					onChange={handleInputChange} 
 					required={true}
 					className='border border-indigo-500/30 rounded-md outline-indigo-500 px-2 sm:px-3 py-1 sm:py-2 text-xs sm:text-sm hover:border-indigo-500/80 w-full text-wrap'
 				>
 					<option key="DEFAULT" value='DEFAULT' disabled>Pilih {title}</option>
 					{
-					processedArray.map((item) => { return (
+					processedArray.map((item) => { 
+						// const uuid = crypto.randomUUID();
+						return (
 							<>
 								<option key={item.id} value={item.nama}>{item.nama}</option>
 							</>
@@ -49,5 +59,5 @@ const DropSelect : React.FC<SelectorProps> = ({title, processedArray}) => {
 		</>
 	);
 }
- 
+
 export default DropSelect;

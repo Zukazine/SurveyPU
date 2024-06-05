@@ -6,21 +6,29 @@ import { FaChevronDown } from 'react-icons/fa';
 type ShortFieldProps = {
   title: string;
   desc? : string;
-	isDetail? : boolean
+	isDetail? : boolean;
+	children? : React.ReactNode;
+	onChange: (input : string) => void;
 };
 
-const ShortField:React.FC<ShortFieldProps> = ({title, desc, isDetail}) => {
+const ShortField:React.FC<ShortFieldProps> = ({title, desc, isDetail, children, onChange}) => {
 	const [drop, setDrop] = useState<boolean>(false);
 	const [shortInput, setShortInput] = useState<string>('');
 
 	useEffect(() => {
-		const storedShortInput = localStorage.getItem('shortInput');
+		const storedShortInput = localStorage.getItem(`shortInput-${title}`);
 		if (storedShortInput) setShortInput(storedShortInput);
 	}, [])
 
 	useEffect(() => {
-		localStorage.setItem('shortInput', shortInput);
+		localStorage.setItem(`shortInput-${title}`, shortInput);
 	}, [shortInput])
+
+	const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+		const newInput = e.target.value
+		setShortInput(newInput);
+    onChange(newInput);
+	}
 
 	return ( 
 		<>
@@ -51,14 +59,18 @@ const ShortField:React.FC<ShortFieldProps> = ({title, desc, isDetail}) => {
 						<div
 							className='flex w-full max-w-[450px] overflow-hidden mb-2'
 						>
-							<p className='text-xs text-gray-500 '>{desc}</p>
+							<div className="flex flex-col gap-1">
+								<p className='text-xs text-gray-500'>{desc}</p>
+								{children}
+							</div>
 						</div>
 					}
 				<input
+					name={title}
 					required={true}
 					type="text"
 					value={shortInput}
-					onChange={(e) => setShortInput(e.target.value)}
+					onChange={handleInputChange}
 					placeholder='e.g. Ilham Maulana'
 					className='border border-indigo-500/30 rounded-md outline-indigo-500 px-2 py-2 text-sm'
 				/>
