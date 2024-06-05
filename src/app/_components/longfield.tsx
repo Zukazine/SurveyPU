@@ -18,11 +18,11 @@ const LongField:React.FC<LongFieldProps> = ({title, desc, isDetail, children, on
 	useEffect(() => {
     const storedTextInput = localStorage.getItem(`textInput-${title}`);
     if (storedTextInput) setTextInput(storedTextInput);
-  }, []);
+  }, [title]);
 
 	useEffect(() => {
     localStorage.setItem(`textInput-${title}`, textInput);
-  }, [textInput]);
+  }, [textInput, title]);
 
 	const handleInputChange = (e : React.ChangeEvent<HTMLTextAreaElement>) => {
 		const newInput = e.target.value

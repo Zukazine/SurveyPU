@@ -19,11 +19,11 @@ const DropSelect : React.FC<SelectorProps> = ({title, processedArray, onChange})
 	useEffect(() => {
     const storedDropdown = localStorage.getItem(`dropdown-${title}`);
     if (storedDropdown) setDropdown(storedDropdown);
-  }, []);
+  }, [title]);
 
 	useEffect(() => {
     localStorage.setItem(`dropdown-${title}`, dropdown);
-  }, [dropdown]);
+  }, [dropdown, title]);
 
 	const handleInputChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
 		const newSelection = e.target.value;

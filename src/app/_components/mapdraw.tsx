@@ -146,7 +146,7 @@ const MapDraw: React.FC<MapFieldProps> = ({ id, initialGeoJsonData, onChange, ty
 
     initializeMap();
 
-  }, [id, onChange]);
+  }, [id, onChange, defaultCenter, type]);
 
   
 	const handleStyleChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
