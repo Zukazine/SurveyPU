@@ -68,9 +68,9 @@ const LongField:React.FC<LongFieldProps> = ({title, desc, isDetail, children, on
 				<textarea
 					value={textInput}
 					onChange={handleInputChange}
-					className='border border-indigo-500/30 rounded-md outline-indigo-500 p-2 text-sm hover:border-indigo-500/80 h-[100px]'
+					className='border border-indigo-500/30 rounded-md outline-indigo-500 p-2 text-sm hover:border-indigo-500/80 h-[150px] myscrollbar-child text-balance'
 					placeholder='Contoh : 10.000.000.000'
-					maxLength={1000}
+					maxLength={2000}
 				/>
 			</div>
 		</>

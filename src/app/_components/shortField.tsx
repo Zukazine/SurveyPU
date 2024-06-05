@@ -18,11 +18,11 @@ const ShortField:React.FC<ShortFieldProps> = ({title, desc, isDetail, children, 
 	useEffect(() => {
 		const storedShortInput = localStorage.getItem(`shortInput-${title}`);
 		if (storedShortInput) setShortInput(storedShortInput);
-	}, [])
+	}, [title])
 
 	useEffect(() => {
 		localStorage.setItem(`shortInput-${title}`, shortInput);
-	}, [shortInput])
+	}, [title, shortInput])
 
 	const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		const newInput = e.target.value

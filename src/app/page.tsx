@@ -1,17 +1,16 @@
 'use client'
 
-import React, { useState, ChangeEvent, FormEvent, useEffect } from 'react';
-import DatePicker from 'react-datepicker';
-import 'react-datepicker/dist/react-datepicker.css';
-import moment from 'moment';
+import React from 'react';
 import MapDraw from './_components/mapdraw';
 import FormWithPersistence from './_components/persistanceForm';
+import MainSurvey from './_components/mainSurvey';
 
 export default function Home() {
   return (
     <>
-      <FormWithPersistence /> 
+      {/* <FormWithPersistence />  */}
       {/* <MapDraw /> */}
+      <MainSurvey />
     </>
   );
 }

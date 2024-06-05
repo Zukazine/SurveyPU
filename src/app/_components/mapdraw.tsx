@@ -11,87 +11,143 @@ import '@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css';
 
 mapboxgl.accessToken = 'pk.eyJ1IjoienVrYXppbmUiLCJhIjoiY2x3ZzZhZnBlMDFqczJqbzc4cWRoa3huMCJ9.NMAXOL6N04GuU6zcwz77Hw'
 
-const MapDraw: React.FC = () => {
-    const mapContainerRef = useRef<HTMLDivElement>(null);
-		const mapRef = useRef<mapboxgl.Map | null>(null);
-		const [is500px, setIs500px] = useState(window.matchMedia("(max-width: 500px)").matches);
-    const [geoJsonData, setGeoJsonData] = useState<GeoJSON.FeatureCollection<GeoJSON.Geometry>>({
-			type: 'FeatureCollection',
-			features: [],
-		});
+type MapFieldProps = {
+  id: string;
+  initialGeoJsonData: GeoJSON.FeatureCollection<GeoJSON.Geometry>;
+  onChange: (id : string, input: GeoJSON.GeoJsonObject | null) => void;
+  type?: string;
+}
 
-		let defaultCenter = [113.9213, 0.7893];
-		let defaultZoom = 5;
-  
-    useEffect(() => {	
-      const map = new mapboxgl.Map({
-        container: mapContainerRef.current!,
-        style: 'mapbox://styles/mapbox/streets-v11',
-        // @ts-ignore
-				center: defaultCenter,
-        zoom: defaultZoom,  
-      });
+const MapDraw: React.FC<MapFieldProps> = ({ id, initialGeoJsonData, onChange, type }) => {
+  const mapContainerRef = useRef<HTMLDivElement>(null);
+  const mapRef = useRef<mapboxgl.Map | null>(null);
+  const drawRef = useRef<MapboxDraw | null>(null);
+  const [is500px, setIs500px] = useState(window.matchMedia("(max-width: 500px)").matches);
+  const [geoJsonData, setGeoJsonData] = useState<GeoJSON.FeatureCollection<GeoJSON.Geometry>>(initialGeoJsonData);
 
-			mapRef.current = map;
-  
-			// DRAW
-      const draw = new MapboxDraw({
-        displayControlsDefault: false,
-        controls: {
-          polygon: true,
-          point: true,
-          line_string: true,
-          trash: true,
-        },
-      });
-  
-      map.addControl(draw);
+  const defaultCenter = [113.9213, 0.7893];
+  const defaultZoom = 5;
 
-			// GEOCODER
-      const geocoder = new MapboxGeocoder({
-        accessToken: mapboxgl.accessToken,
-        mapboxgl: mapboxgl,
-        marker: true, 
-        placeholder: 'Search for places', 
-      });
-  
-      map.addControl(geocoder, 'top-left');
+  useEffect(() => {
+    const initializeMap = () => {
+      if (!mapRef.current) {
+        const map = new mapboxgl.Map({
+          container: mapContainerRef.current!,
+          style: 'mapbox://styles/mapbox/streets-v11',
+          // @ts-ignore
+          center: defaultCenter,
+          zoom: defaultZoom,
+        });
 
-			// FULLSCREEN
-			const fullscreenControl = new mapboxgl.FullscreenControl();
-    	map.addControl(fullscreenControl, 'top-left');
+        mapRef.current = map;
 
+        // DRAW
+        if (type === 'point') {
+          const draw = new MapboxDraw({
+            displayControlsDefault: false,
+            controls: {
+              point: true,
+              trash: true,
+            },
+          });
+          
+          drawRef.current = draw;
+          map.addControl(draw);
+        } else if (type === 'line') {
+          const draw = new MapboxDraw({
+            displayControlsDefault: false,
+            controls: {
+              line_string: true,
+              trash: true,
+            },
+          });
+          
+          drawRef.current = draw;
+          map.addControl(draw);
+        } else if (type === 'polygon'){
+          const draw = new MapboxDraw({
+            displayControlsDefault: false,
+            controls: {
+              polygon: true,
+              trash: true,
+            },
+          });
+          
+          drawRef.current = draw;
+          map.addControl(draw);
+        } else {
+          const draw = new MapboxDraw({
+            displayControlsDefault: false,
+            controls: {
+              polygon: true,
+              point: true,
+              line_string: true,
+              trash: true,
+            },
+          });
+          
+          drawRef.current = draw;
+          map.addControl(draw);
+        }
 
-			// GEOLOCATE
-			const geolocateControl = new mapboxgl.GeolocateControl({
-        positionOptions: {
-          enableHighAccuracy: true,
-        },
-        trackUserLocation: true,
-        showUserHeading: true,
-      });
+        // GEOCODER
+        const geocoder = new MapboxGeocoder({
+          accessToken: mapboxgl.accessToken,
+          mapboxgl: mapboxgl,
+          marker: true,
+          placeholder: 'Search for places',
+        });
 
-      map.addControl(geolocateControl, 'top-left');
+        map.addControl(geocoder, 'top-left');
 
-      map.on('draw.create', updateArea);
-      map.on('draw.delete', updateArea);
-      map.on('draw.update', updateArea);
-  
-      function updateArea(e: any) {
-        const data = draw.getAll();
-				setGeoJsonData(data);
-        console.log(data);
+        // FULLSCREEN
+        const fullscreenControl = new mapboxgl.FullscreenControl();
+        map.addControl(fullscreenControl, 'top-left');
+
+        // GEOLOCATE
+        const geolocateControl = new mapboxgl.GeolocateControl({
+          positionOptions: {
+            enableHighAccuracy: true,
+          },
+          trackUserLocation: true,
+          showUserHeading: true,
+          fitBoundsOptions: {
+            maxZoom: 5
+          }
+        });
+
+        map.addControl(geolocateControl, 'top-left');
+
+        map.on('draw.create', updateArea);
+        map.on('draw.delete', updateArea);
+        map.on('draw.update', updateArea);
+
+        map.on('load', () => {
+          geolocateControl.trigger();
+        });
+
+        return () => {
+          map.off('draw.create', updateArea);
+          map.off('draw.delete', updateArea);
+          map.off('draw.update', updateArea);
+          map.remove();
+        };
       }
+    };
 
-			map.on('load', () => {
-        geolocateControl.trigger();
-      });
-  
-      return () => {
-        map.remove();
-      };
-			
-    }, []);
+    const updateArea = () => {
+      // @ts-ignore
+      const data = drawRef.current?.getAll();
+      if (data) {
+        setGeoJsonData(data);
+        onChange(id, data);
+      }
+    };
+
+    initializeMap();
+
+  }, [id, onChange]);
+
   
 	const handleStyleChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
 		const newStyle = event.target.value;
@@ -113,12 +169,12 @@ const MapDraw: React.FC = () => {
     return () => {
       mediaQuery.removeEventListener('change', handleMediaQueryChange);
     };
-  }, []);  
+  }, []);
 
 	return (
-		<div>
+		<>
 			<div ref={mapContainerRef} style={{ width: '100%', height: '500px' }} />
-			<div>
+      <div>
         <p className='font-semibold w-full text-wrap text-md mb-3 mt-3'>Ganti Style Peta</p>
         <select id="mapStyle" onChange={handleStyleChange} className='border border-indigo-500/30 rounded-md outline-indigo-500 px-2 sm:px-3 py-1 sm:py-2 text-xs sm:text-sm hover:border-indigo-500/80 w-full text-wrap'>
           <option value="streets-v11">Streets</option>
@@ -138,8 +194,7 @@ const MapDraw: React.FC = () => {
         </div>
       )}
       </div>
-		</div>
-    
+		</>
 	);
 };
   

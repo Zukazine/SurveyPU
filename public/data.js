@@ -44,4 +44,37 @@ export const kawasanPrior = [
     { id: 2, nama: 'Kawasan B' },
     { id: 3, nama: 'Kawasan C' },
     { id: 4, nama: 'Kawasan D' },
-  ]
+]
+
+export const objekInfra = [
+  { id: 1, nama: 'Jalan Tol Medan—Kualanamu—Lubuk Pakam—Tebing Tinggi (62 km)'},
+  { id: 2, nama: 'Jalan Tol Pekanbaru—Kandis—Dumai (131,5 km) - bagian dari 8 ruas Trans Sumatera'},
+  { id: 3, nama: 'Jalan Tol Palembang—Simpang Indralaya (22 km) - bagian dari 8 ruas Trans Sumatera'},
+  { id: 4, nama: 'Jalan Tol Pematang Panggang—Kayu Agung (85 km) - bagian dari 8 ruas Trans Sumatera'},
+  { id: 5, nama: 'Jalan Tol Terbanggi Besar—Pematang Panggang (100 km) - bagian dari 8 ruas Trans Sumatera'},
+  { id: 6, nama: 'Jalan Tol Bakauheni—Terbanggi Besar (140,9km) - bagian dari 8 ruas Trans Sumatera'},
+  { id: 7, nama: 'Jalan Tol Kunciran—Serpong (11,2 km)'},
+  { id: 8, nama: 'Jalan Akses Tanjung Priok (16,7km)'},
+  { id: 9, nama: 'Jalan Tol Jakarta—Cikampek II Elevated (36,4km)'},
+  { id: 10, nama: 'Jalan Tol Soreang—Pasirkoja (11 km)'},
+  { id: 11, nama: 'Pembangunan Jaringan Irigasi DI. Leuwigoong Kab. Garut'},
+  { id: 12, nama: 'Jalan Tol Pejagan—Pemalang (57,5 km)'},
+  { id: 13, nama: 'Jalan Tol Semarang—Solo (72,6km)'},
+  { id: 14, nama: 'Jalan Tol Solo—Ngawi (90,1km)'},
+  { id: 15, nama: 'Jalan Tol Pandaan—Malang (37,62 km)'},
+  { id: 16, nama: 'Jalan Tol Ngawi—Kertosono (87km)'},
+  { id: 17, nama: 'Jalan Tol Kertosono—Mojokerto (40,5km)'},
+  { id: 18, nama: 'Jalan Tol Mojokerto—Surabaya (36,3km)'},
+  { id: 19, nama: 'Jalan Tol Gempol—Pasuruan (34,2km)'},
+  { id: 20, nama: 'Bendungan Tamblang'},
+  { id: 21, nama: 'Bendungan Kuwil Kawangkoan'},
+  { id: 22, nama: 'Pembangunan Rumah Khusus di Wilayah Perbatasan Ambon'},
+  { id: 23, nama: 'Pembangunan Rumah Khusus di Wilayah Perbatasan Ternate'},
+]
+
+export const ditjen = [
+  { id: 1, nama: 'SDA' },
+  { id: 2, nama: 'Bina Marga' },
+  { id: 3, nama: 'Cipta Karya' },
+  { id: 4, nama: 'Perumahan' },
+]
