@@ -22,11 +22,26 @@ const MapDraw: React.FC<MapFieldProps> = ({ id, initialGeoJsonData, onChange, ty
   const mapContainerRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<mapboxgl.Map | null>(null);
   const drawRef = useRef<MapboxDraw | null>(null);
-  const [is500px, setIs500px] = useState(window.matchMedia("(max-width: 500px)").matches);
+  // const [is500px, setIs500px] = useState(window.matchMedia("(max-width: 500px)").matches);
+  const [is500px, setIs500px] = useState(false);
   const [geoJsonData, setGeoJsonData] = useState<GeoJSON.FeatureCollection<GeoJSON.Geometry>>(initialGeoJsonData);
 
   const defaultCenter = [113.9213, 0.7893];
   const defaultZoom = 5;
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const mediaQuery = window.matchMedia("(max-width: 500px)");
+      setIs500px(mediaQuery.matches);
+
+      const handleResize = () => setIs500px(mediaQuery.matches);
+      mediaQuery.addEventListener('change', handleResize);
+
+      return () => {
+        mediaQuery.removeEventListener('change', handleResize);
+      };
+    }
+  }, []);
 
   useEffect(() => {
     const initializeMap = () => {

@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState, useEffect, ChangeEvent } from "react";
+import React, { useState, useEffect } from "react";
 
 type ArrayObj = {
 	id: number;
