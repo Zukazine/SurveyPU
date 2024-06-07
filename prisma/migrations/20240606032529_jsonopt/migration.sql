@@ -1,0 +1,5 @@
+-- AlterTable
+ALTER TABLE "surveys" ALTER COLUMN "geotagPoint" DROP NOT NULL,
+ALTER COLUMN "geotagLine" DROP NOT NULL,
+ALTER COLUMN "geotagAreaInfra" DROP NOT NULL,
+ALTER COLUMN "geotagAreaManf" DROP NOT NULL;

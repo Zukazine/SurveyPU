@@ -9,15 +9,15 @@ interface DatePickerProps {
 const DatePicker: React.FC<DatePickerProps> = ({ onChange }) => {
 	const [date, setDate] = useState<string>('');
 	
-	useEffect(() => {
-    const storedDate = localStorage.getItem('date');
-		if (storedDate) setDate(storedDate);
-	}, []);
+// 	useEffect(() => {
+//     const storedDate = localStorage.getItem('date');
+// 		if (storedDate) setDate(storedDate);
+// 	}, []);
 
-	// Save values to local storage
-	useEffect(() => {
-    localStorage.setItem('date', date);
-  }, [date]);
+// 	// Save values to local storage
+// 	useEffect(() => {
+//     localStorage.setItem('date', date);
+//   }, [date]);
 
   const handleDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newDate = e.target.value;

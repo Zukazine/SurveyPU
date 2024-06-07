@@ -41,12 +41,50 @@ const MainSurvey = () => {
 		}
 	)
 
-	const handleSubmit = (event: React.FormEvent) => {
-			event.preventDefault();
-			toast.success('Form submitted successfully!', {
-				position: 'top-right',
-				autoClose: 3000,
-			});
+	const handleSubmit = async (event: React.FormEvent) => {
+		event.preventDefault();
+
+		if (formData.tanggalSurvey === '') {
+			toast.warn('tangga diisi yuk')
+		} else if (formData.namaSurveyor === '') {
+			toast.warn('nama diisi ya')
+		} else if (formData.provinsi === '') {
+			toast.warn('Provinsi diisi ya')
+		} else if (formData.ditjen === '') {
+			toast.warn('Ditjen diisi ya')
+		}  else if (formData.objInfra === '') {
+			toast.warn('Objek Infrastruktur diisi ya')
+		} else {
+			const toastId = toast.loading('Submitting form...');
+
+			try {
+				const response = await fetch('/api/submitSurvey', {
+					method: 'POST',
+					headers: {
+						'Content-Type': 'application/json'
+					},
+					body: JSON.stringify(formData)
+				});
+
+				if (response.ok) {
+					toast.update(toastId, {
+						render: 'Form submitted successfully!',
+						type: 'success',
+						isLoading: false,
+						autoClose: 3000
+					});
+				} else {
+					throw new Error('Failed to submit form');
+				}
+			} catch (error) {
+				toast.update(toastId, {
+					render: 'Failed to submit form',
+					type: 'error',
+					isLoading: false,
+					autoClose: 3000
+				});
+			}
+		}
   };
 
 	const handleGeoJsonChange = (id : string, geoJson: GeoJSON.GeoJsonObject | null) => {
@@ -65,7 +103,7 @@ const MainSurvey = () => {
 					/>
 					<ShortField 
 						title='Nama Surveyor'
-						onChange={(input : string) => {setFormData({...formData, namaSurveyor: input})}}
+						onChange={(input : string) => setFormData({...formData, namaSurveyor: input})}
 					/>
 					<DropSelect 
 						title='Provinsi' 

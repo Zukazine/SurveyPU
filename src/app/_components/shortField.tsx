@@ -15,14 +15,14 @@ const ShortField:React.FC<ShortFieldProps> = ({title, desc, isDetail, children, 
 	const [drop, setDrop] = useState<boolean>(false);
 	const [shortInput, setShortInput] = useState<string>('');
 
-	useEffect(() => {
-		const storedShortInput = localStorage.getItem(`shortInput-${title}`);
-		if (storedShortInput) setShortInput(storedShortInput);
-	}, [title])
+	// useEffect(() => {
+	// 	const storedShortInput = localStorage.getItem(`shortInput-${title}`);
+	// 	if (storedShortInput) setShortInput(storedShortInput);
+	// }, [title])
 
-	useEffect(() => {
-		localStorage.setItem(`shortInput-${title}`, shortInput);
-	}, [title, shortInput])
+	// useEffect(() => {
+	// 	localStorage.setItem(`shortInput-${title}`, shortInput);
+	// }, [title, shortInput])
 
 	const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		const newInput = e.target.value

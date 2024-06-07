@@ -16,14 +16,14 @@ type SelectorProps = {
 const DropSelect : React.FC<SelectorProps> = ({title, processedArray, onChange}) => {
 	const [dropdown, setDropdown] = useState<string>('');
 
-	useEffect(() => {
-    const storedDropdown = localStorage.getItem(`dropdown-${title}`);
-    if (storedDropdown) setDropdown(storedDropdown);
-  }, [title]);
+// 	useEffect(() => {
+//     const storedDropdown = localStorage.getItem(`dropdown-${title}`);
+//     if (storedDropdown) setDropdown(storedDropdown);
+//   }, [title]);
 
-	useEffect(() => {
-    localStorage.setItem(`dropdown-${title}`, dropdown);
-  }, [dropdown, title]);
+// 	useEffect(() => {
+//     localStorage.setItem(`dropdown-${title}`, dropdown);
+//   }, [dropdown, title]);
 
 	const handleInputChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
 		const newSelection = e.target.value;
@@ -43,7 +43,7 @@ const DropSelect : React.FC<SelectorProps> = ({title, processedArray, onChange})
 					required={true}
 					className='border border-indigo-500/30 rounded-md outline-indigo-500 px-2 sm:px-3 py-1 sm:py-2 text-xs sm:text-sm hover:border-indigo-500/80 w-full text-wrap'
 				>
-					<option key="DEFAULT" value='DEFAULT' disabled>Pilih {title}</option>
+					<option key="DEFAULT" value='DEFAULT'>Pilih {title}</option>
 					{
 					processedArray.map((item) => { 
 						// const uuid = crypto.randomUUID();
