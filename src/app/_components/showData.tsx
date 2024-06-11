@@ -2,19 +2,15 @@
 
 import { useState } from 'react';
 import axios from 'axios';
-import { 
-	objekInfra
-} from '../../../public/data'
 
 const ShowData = () => {
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
-  const [objInfra, setObjInfra] = useState('');
   const [surveys, setSurveys] = useState([]);
 
   const fetchSurveys = async () => {
     const { data } = await axios.get('/api/filterData', {
-      params: { startDate, endDate, objInfra },
+      params: { startDate, endDate },
     });
     setSurveys(data);
   };
@@ -34,18 +30,6 @@ const ShowData = () => {
           value={endDate}
           onChange={(e) => setEndDate(e.target.value)}
         />
-        <select
-          className="border rounded p-2"
-          value={objInfra}
-          onChange={(e) => setObjInfra(e.target.value)}
-        >
-          <option value="">Select Object Infrastruktur</option>
-          {objekInfra.map((obj) => (
-            <option key={obj.id} value={obj.nama}>
-              {obj.nama}
-            </option>
-          ))}
-        </select>
         <button
           className="bg-blue-500 text-white p-2 rounded"
           onClick={fetchSurveys}
@@ -62,10 +46,7 @@ const ShowData = () => {
             <th className="py-2 px-4 border-b">Provinsi</th>
             <th className="py-2 px-4 border-b">Ditjen</th>
             <th className="py-2 px-4 border-b">Obj Infra</th>
-            <th className="py-2 px-4 border-b">Geotag Point</th>
-            <th className="py-2 px-4 border-b">Geotag Line</th>
-            <th className="py-2 px-4 border-b">Geotag Area Infra</th>
-            <th className="py-2 px-4 border-b">Geotag Area Manf</th>
+            <th className="py-2 px-4 border-b">Point</th>
           </tr>
         </thead>
         <tbody>
@@ -78,9 +59,6 @@ const ShowData = () => {
               <td className="py-2 px-4 border-b">{survey.ditjen}</td>
               <td className="py-2 px-4 border-b">{survey.objInfra}</td>
               <td className="py-2 px-4 border-b">{JSON.stringify(survey.geotagPoint)}</td>
-              <td className="py-2 px-4 border-b">{JSON.stringify(survey.geotagLine)}</td>
-              <td className="py-2 px-4 border-b">{JSON.stringify(survey.geotagAreaInfra)}</td>
-              <td className="py-2 px-4 border-b">{JSON.stringify(survey.geotagAreaManf)}</td>
             </tr>
           ))}
         </tbody>
@@ -89,4 +67,4 @@ const ShowData = () => {
   );
 }
 
-export default ShowData;
+export default ShowData; 
