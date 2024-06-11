@@ -5,6 +5,7 @@ import 'mapbox-gl/dist/mapbox-gl.css'; // Import the Mapbox GL CSS
 
 mapboxgl.accessToken = 'pk.eyJ1IjoienVrYXppbmUiLCJhIjoiY2x3ZzZhZnBlMDFqczJqbzc4cWRoa3huMCJ9.NMAXOL6N04GuU6zcwz77Hw'; // Replace with your Mapbox access token
 
+// @ts-ignore
 const GeotagLineMap = ({ geotagLine }) => {
   const mapContainer = useRef(null);
   const [hasGeotagLines, setHasGeotagLines] = useState(true);
@@ -20,6 +21,7 @@ const GeotagLineMap = ({ geotagLine }) => {
     }
 
     const map = new mapboxgl.Map({
+      // @ts-ignore
       container: mapContainer.current,
       style: 'mapbox://styles/mapbox/streets-v11',
       center: [106.8272, -6.1751], // Default center (Jakarta, Indonesia)
@@ -27,13 +29,16 @@ const GeotagLineMap = ({ geotagLine }) => {
     });
 
     const lines = geotagLine.features.map(
+      // @ts-ignore
       (feature) => feature.geometry.coordinates
     );
 
     map.on('load', () => {
+      // @ts-ignore
       lines.forEach((line, index) => {
         map.addSource(`line${index}`, {
           type: 'geojson',
+          // @ts-ignore
           data: {
             type: 'Feature',
             geometry: {
@@ -57,6 +62,7 @@ const GeotagLineMap = ({ geotagLine }) => {
 
       if (lines.length > 0) {
         const bounds = new mapboxgl.LngLatBounds();
+        // @ts-ignore
         lines.forEach((line) => line.forEach((point) => bounds.extend(point)));
         map.fitBounds(bounds, { padding: 20 });
       }
