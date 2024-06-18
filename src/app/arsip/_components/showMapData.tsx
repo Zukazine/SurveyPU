@@ -1,9 +1,10 @@
 // pages/index.js
+'use client'
+
 import { useState } from 'react';
 import axios from 'axios';
 import dynamic from 'next/dynamic';
-import GeotagLineMap from './geotagLineMap';
-import GeotagPointMap from './geotagPointMap';
+import MapComponent from './mapComponent';
 
 const ShowMapData = () => {
   const [surveyId, setSurveyId] = useState('');
@@ -31,12 +32,18 @@ const ShowMapData = () => {
       </div>
       {surveyData ? (
         <div>
-          <h2 className="text-xl mb-4">Geotag Points</h2>
+          <h2 className="text-xl mb-4">Geotagging Point</h2>
           {/* @ts-ignore */}
-          <GeotagPointMap geotagPoint={surveyData.geotagPoint} />
-          <h2 className="text-xl mt-8 mb-4">Geotag Lines</h2>
+          <MapComponent geotagData={surveyData.geotagPoint} type="Point" />
+          <h2 className="text-xl mt-8 mb-4">Geotagging Line</h2>
           {/* @ts-ignore */}
-          <GeotagLineMap geotagLine={surveyData.geotagLine} />
+          <MapComponent geotagData={surveyData.geotagLine} type="LineString" />
+          <h2 className="text-xl mt-8 mb-4">Geotagging Area Infrastruktur</h2>
+          {/* @ts-ignore */}
+          <MapComponent geotagData={surveyData.geotagAreaInfra} type="Polygon" />
+          <h2 className="text-xl mt-8 mb-4">Geotagging Area Manfaat</h2>
+          {/* @ts-ignore */}
+          <MapComponent geotagData={surveyData.geotagAreaManf} type="Polygon" />
         </div>
       ) : (
         <p>No survey data available. Please enter a valid survey ID.</p>

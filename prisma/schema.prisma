@@ -16,8 +16,9 @@ datasource db {
 model Survey {
   id              String   @id @default(cuid())
   tanggalSurvey   DateTime
-  namaSurveyor    String
+  pic             String
   provinsi        String
+  kapri           String[]
   ditjen          String
   objInfra        String
   geotagPoint     Json?

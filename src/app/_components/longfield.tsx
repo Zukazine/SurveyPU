@@ -39,7 +39,7 @@ const LongField:React.FC<LongFieldProps> = ({title, desc, isDetail, children, on
 						<button type='button' className='flex items-center justify-center gap-2 group' onClick={() => {setDrop(!drop)}}>
 							{drop ?
 								<>
-									<span className='text-xs text-indigo-500'>detailed description</span>
+									<span className='text-xs text-indigo-500 '>detailed description</span>
 									<div className='flex items-center justify-center border p-1 rounded-full border-indigo-500'>
 										<FaChevronDown className='max-h-2 max-w-2 text-indigo-700 rotate-180 transition-all duration-150'/>
 									</div>

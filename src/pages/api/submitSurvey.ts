@@ -7,8 +7,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   if (req.method === 'POST') {
     const {
       tanggalSurvey,
-      namaSurveyor,
+      pic,
       provinsi,
+      kapri,
       ditjen,
       objInfra,
       geotagPoint,
@@ -21,8 +22,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       const survey = await prisma.survey.create({
         data: {
           tanggalSurvey: new Date(tanggalSurvey),
-          namaSurveyor,
+          pic,
           provinsi,
+          kapri,
           ditjen,
           objInfra,
           geotagPoint,
