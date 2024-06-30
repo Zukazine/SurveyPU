@@ -47,8 +47,8 @@ const DropSelect : React.FC<SelectorProps> = ({title, processedArray, onChange, 
           type='text'
           value={searchTerm}
           onChange={handleSearchChange}
-          placeholder={`Masukan Keyword. Contoh : Jalan Tol`}
-          className='border border-yellow-500/30 rounded-md outline-yellow-400 px-2 sm:px-3 py-1 sm:py-2 text-xs sm:text-sm hover:border-yellow-500/80 w-full text-wrap'
+          placeholder={`Input Keyword. Contoh : Jalan Tol`}
+          className='border border-yellow-500/30 rounded-md outline-yellow-400 px-2 sm:px-3 py-2 text-xs sm:text-sm hover:border-yellow-500/80 w-1/2 text-wrap'
         />}
 				<select 
 					id='provinsi-selection'

@@ -21,6 +21,7 @@ model Survey {
   kapri           String[]
   ditjen          String
   objInfra        String
+  areaManfaat     String[]
   geotagPoint     Json?
   geotagLine      Json?
   geotagAreaInfra Json?

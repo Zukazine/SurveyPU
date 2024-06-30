@@ -1,9 +1,6 @@
-// pages/index.js
 'use client'
 
 import { useState } from 'react';
-import axios from 'axios';
-import dynamic from 'next/dynamic';
 import MapComponent from './mapComponent';
 
 const ShowMapData = () => {
@@ -24,10 +21,10 @@ const ShowMapData = () => {
           placeholder="Enter Survey ID"
           value={surveyId}
           onChange={(e) => setSurveyId(e.target.value)}
-          className="border p-2 mr-2"
+          className="border p-2 mr-2 border-indigo-500/30 outline-indigo-500 rounded text-sm "
         />
-        <button onClick={fetchSurveyData} className="bg-blue-500 text-white p-2">
-          Fetch Survey Data
+        <button onClick={fetchSurveyData} className="bg-indigo-500 text-white p-2 text-xs shadow-[2px_2px_0px_black] hover:shadow-none hover:translate-x-[2px] hover:translate-y-[2px]">
+          Show Map
         </button>
       </div>
       {surveyData ? (
@@ -46,7 +43,7 @@ const ShowMapData = () => {
           <MapComponent geotagData={surveyData.geotagAreaManf} type="Polygon" />
         </div>
       ) : (
-        <p>No survey data available. Please enter a valid survey ID.</p>
+        <p className='text-[13px] font-mono'>No survey data available. Please enter a valid survey ID.</p>
       )}
     </div>
   );

@@ -136,6 +136,50 @@ function TheOptions(provinsi : string) {
         "PKN Pekanbaru",
         "PKSN Bengkalis"
       ])
+    } else if (provinsi == 'Aceh') {
+      setOptions([
+        "KI Ladong",
+        "KEK Arun Lhokseumawe",
+        "PKW Meulaboh",
+        "KSPN Sabang",
+        "KPPN Simeulue",
+        "KPPN Takengon",
+        "PKN Banda Aceh",
+        "PKW Lhokseumawe",
+        "PKW Takengon"
+      ])
+    } else if (provinsi === 'Bengkulu') {
+      setOptions([
+        "Pulau Enggano",
+        "PKN Bengkulu",
+        "PKW Mukomuko",
+        "PKW Curup",
+        "PKW Manna"
+      ]);
+    } else if (provinsi === 'Kalimantan Timur') {
+      setOptions([
+        "KI Kariangau",
+        "KI Buluminung",
+        "DPP Baru Derawan Berau / KSPN Derawan Sangalaki dsk"
+      ]);
+    } else if (provinsi === 'Nusa Tenggara Timur') {
+      setOptions([
+        "DPP Labuan Bajo",
+        "Kawasan Andalan Pariwisata Komodo dsk",
+        "Kawasan Andalan Pariwisata Ruteng – Bajawa",
+        "KSPN Ende - Kelimutu",
+        "Kawasan Andalan Pariwisata Maumere – Ende",
+        "KPPN Manggarai Barat",
+        "Kawasan Andalan Pertanian Kupang dsk"
+      ]);
+    } else if (provinsi === 'Nusa Tenggara Barat') {
+      setOptions([
+        "Kawasan Pertanian NTB",
+        "KSPN Gili Tramenda",
+        "KSPN Pantai Selatan Lombok",
+        "PKN Mataram",
+        "PKW Sumbawa Besar"
+      ]);
     } else if (provinsi == 'Sumatera Utara') {
       setOptions([
         "WM Mebidangro",
@@ -235,6 +279,22 @@ function TheOptions(provinsi : string) {
         "PKW Tomohon",
         "PKW Tondano"
       ])
+    } else if (provinsi === 'Sulawesi Tenggara') {
+      setOptions([
+        "PKN Kendari",
+        "KSPN Wakatobi",
+        "KI Konawe"
+      ]);
+    } else if (provinsi === 'Sulawesi Selatan') {
+      setOptions([
+        "Kawasan Pertanian Kabupaten Bone",
+        "Kawasan Pertanian Kabupaten Wajo",
+        "KI Bantaeng",
+        "KSPN Toraja",
+        "KSPN Takabonerate",
+        "KPPN Makassar",
+        "PKN Mamminasata"
+      ]);
     } else if (provinsi == 'Maluku Utara') {
       setOptions([
         "PKN Ternate",

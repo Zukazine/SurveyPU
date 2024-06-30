@@ -16,9 +16,10 @@ type MapFieldProps = {
   initialGeoJsonData: GeoJSON.FeatureCollection<GeoJSON.Geometry>;
   onChange: (id : string, input: GeoJSON.GeoJsonObject | null) => void;
   type?: string;
+  complex? : boolean;
 }
 
-const MapDraw: React.FC<MapFieldProps> = ({ id, initialGeoJsonData, onChange, type }) => {
+const MapDraw: React.FC<MapFieldProps> = ({ id, initialGeoJsonData, onChange, type, complex }) => {
   const mapContainerRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<mapboxgl.Map | null>(null);
   const drawRef = useRef<MapboxDraw | null>(null);
@@ -64,6 +65,7 @@ const MapDraw: React.FC<MapFieldProps> = ({ id, initialGeoJsonData, onChange, ty
               point: true,
               trash: true,
             },
+            styles: drawStyles
           });
           
           drawRef.current = draw;
@@ -75,6 +77,7 @@ const MapDraw: React.FC<MapFieldProps> = ({ id, initialGeoJsonData, onChange, ty
               line_string: true,
               trash: true,
             },
+            styles: drawStyles
           });
           
           drawRef.current = draw;
@@ -86,6 +89,7 @@ const MapDraw: React.FC<MapFieldProps> = ({ id, initialGeoJsonData, onChange, ty
               polygon: true,
               trash: true,
             },
+            styles: drawStyles
           });
           
           drawRef.current = draw;
@@ -99,6 +103,7 @@ const MapDraw: React.FC<MapFieldProps> = ({ id, initialGeoJsonData, onChange, ty
               line_string: true,
               trash: true,
             },
+            styles: drawStyles
           });
           
           drawRef.current = draw;
@@ -214,4 +219,97 @@ const MapDraw: React.FC<MapFieldProps> = ({ id, initialGeoJsonData, onChange, ty
 };
   
 export default MapDraw;
-  
+
+export const drawStyles = [
+  // Point
+  {
+    'id': 'gl-draw-point-inactive',
+    'type': 'circle',
+    'filter': ['all', ['==', '$type', 'Point'], ['==', 'meta', 'feature']],
+    'paint': {
+      'circle-radius': 5,
+      'circle-color': '#ff0000'
+    }
+  },
+  {
+    'id': 'gl-draw-point-active',
+    'type': 'circle',
+    'filter': ['all', ['==', '$type', 'Point'], ['==', 'meta', 'feature'], ['==', 'active', 'true']],
+    'paint': {
+      'circle-radius': 7,
+      'circle-color': '#ff0000'
+    }
+  },
+  // Line
+  {
+    'id': 'gl-draw-line-inactive',
+    'type': 'line',
+    'filter': ['all', ['==', '$type', 'LineString'], ['==', 'meta', 'feature']],
+    'layout': {
+      'line-cap': 'round',
+      'line-join': 'round'
+    },
+    'paint': {
+      'line-color': '#ff0000',
+      'line-width': 2
+    }
+  },
+  {
+    'id': 'gl-draw-line-active',
+    'type': 'line',
+    'filter': ['all', ['==', '$type', 'LineString'], ['==', 'meta', 'feature'], ['==', 'active', 'true']],
+    'layout': {
+      'line-cap': 'round',
+      'line-join': 'round'
+    },
+    'paint': {
+      'line-color': '#ff0000',
+      'line-width': 4
+    }
+  },
+  // Polygon
+  {
+    'id': 'gl-draw-polygon-fill-inactive',
+    'type': 'fill',
+    'filter': ['all', ['==', '$type', 'Polygon'], ['==', 'meta', 'feature']],
+    'paint': {
+      'fill-color': '#ff0000',
+      'fill-opacity': 0.1
+    }
+  },
+  {
+    'id': 'gl-draw-polygon-fill-active',
+    'type': 'fill',
+    'filter': ['all', ['==', '$type', 'Polygon'], ['==', 'meta', 'feature'], ['==', 'active', 'true']],
+    'paint': {
+      'fill-color': '#ff0000',
+      'fill-opacity': 0.1
+    }
+  },
+  {
+    'id': 'gl-draw-polygon-stroke-inactive',
+    'type': 'line',
+    'filter': ['all', ['==', '$type', 'Polygon'], ['==', 'meta', 'feature']],
+    'layout': {
+      'line-cap': 'round',
+      'line-join': 'round'
+    },
+    'paint': {
+      'line-color': '#ff0000',
+      'line-width': 2
+    }
+  },
+  {
+    'id': 'gl-draw-polygon-stroke-active',
+    'type': 'line',
+    'filter': ['all', ['==', '$type', 'Polygon'], ['==', 'meta', 'feature'], ['==', 'active', 'true']],
+    'layout': {
+      'line-cap': 'round',
+      'line-join': 'round'
+    },
+    'paint': {
+      'line-color': '#ff0000',
+      'line-width': 4
+    }
+  }
+];

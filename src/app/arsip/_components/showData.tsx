@@ -9,9 +9,10 @@ interface Survey {
   tanggalSurvey: string;
   pic: string;
   provinsi: string;
-  kapri: string;
+  kapri: string[];
   ditjen: string;
   objInfra: string;
+  areaManfaat: string[];
 	geotagPoint: GeoJSON.GeoJsonObject | {};
 	geotagLine: GeoJSON.GeoJsonObject | {};
 	geotagAreaInfra: GeoJSON.GeoJsonObject | {};
@@ -65,75 +66,78 @@ const ShowData: React.FC = () => {
     document.body.removeChild(link);
   };
 
-
   return (
     <div className="container mx-auto p-4">
       <div className="flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-4 mb-4">
         <input
           type="date"
-          className="border rounded p-2"
+          className="border rounded px-2 text-xs border-indigo-500/30 outline-indigo-500 cursor-pointer"
           value={startDate}
           onChange={(e) => setStartDate(e.target.value)}
         />
         <input
           type="date"
-          className="border rounded p-2"
+          className="border rounded px-2 text-xs border-indigo-500/30 outline-indigo-500 cursor-pointer"
           value={endDate}
           onChange={(e) => setEndDate(e.target.value)}
         />
         <button
-          className="bg-blue-500 text-white p-2 rounded"
+          className="bg-indigo-500 text-white p-2 rounded text-sm shadow-[2px_2px_0px_black] hover:shadow-none hover:translate-x-[2px] hover:translate-y-[2px]"
           onClick={fetchSurveys}
         >
           Search
         </button>
         <button
-          className="bg-green-500 text-white p-2 rounded"
+          className="bg-green-500 text-white p-2 rounded text-xs shadow-[2px_2px_0px_black] hover:shadow-none hover:translate-x-[2px] hover:translate-y-[2px]"
           onClick={fetchTodaySurveys}
         >
-          {`Show Today's Data`}
+          {`Today's Data`}
         </button>
         <button
-          className="bg-gray-500 text-white p-2 rounded"
+          className="bg-gray-500 text-white p-2 rounded text-xs shadow-[2px_2px_0px_black] hover:shadow-none hover:translate-x-[2px] hover:translate-y-[2px]"
           onClick={fetchAllSurveys}
         >
-          Show All Data
+          All Data
         </button>
         <button
-          className="bg-yellow-500 text-white p-2 rounded"
+          className="bg-yellow-500 text-white p-2 rounded text-xs shadow-[2px_2px_0px_black] hover:shadow-none hover:translate-x-[2px] hover:translate-y-[2px]"
           onClick={downloadCSV}
         >
           Download CSV
         </button>
       </div>
-      <table className="min-w-full bg-white">
-        <thead>
-          <tr>
-            <th className="py-2 px-4 border-b">ID</th>
-            <th className="py-2 px-4 border-b">Tanggal Survey</th>
-            <th className="py-2 px-4 border-b">PIC</th>
-            <th className="py-2 px-4 border-b">Provinsi</th>
-            <th className="py-2 px-4 border-b">Kapri</th>
-            <th className="py-2 px-4 border-b">Ditjen</th>
-            <th className="py-2 px-4 border-b">Obj Infra</th>
-            {/* <th className="py-2 px-4 border-b">Point</th> */}
-          </tr>
-        </thead>
-        <tbody>
-          {surveys.map((survey) => (
-            <tr key={survey.id}>
-              <td className="py-2 px-4 border-b">{survey.id}</td>
-              <td className="py-2 px-4 border-b">{new Date(survey.tanggalSurvey).toLocaleDateString()}</td>
-              <td className="py-2 px-4 border-b">{survey.pic}</td>
-              <td className="py-2 px-4 border-b">{survey.provinsi}</td>
-              <td className="py-2 px-4 border-b">{survey.kapri}</td>
-              <td className="py-2 px-4 border-b">{survey.ditjen}</td>
-              <td className="py-2 px-4 border-b">{survey.objInfra}</td>
-              {/* <td className="py-2 px-4 border-b">{JSON.stringify(survey.geotagPoint)}</td> */}
-            </tr>
-          ))}
-        </tbody>
-      </table>
+      {/* <div className='flex flex-col border-2 border-black'> */}
+        <div className='flex flex-col border-4 border-red-800 w-full'>
+          <table className="relative max-w-full bg-white border">
+            <thead className='text-xs bg-indigo-500 text-white'>
+              <tr>
+                <th className="py-2 px-4 border-b border-indigo-600 max-w-40">ID</th>
+                <th className="py-2 px-4 border-b border-indigo-600">Tanggal</th>
+                <th className="py-2 px-4 border-b border-indigo-600">PIC</th>
+                <th className="py-2 px-4 border-b border-indigo-600">Provinsi</th>
+                <th className="py-2 px-4 border-b border-indigo-600">Kapri</th>
+                <th className="py-2 px-4 border-b border-indigo-600">Ditjen</th>
+                <th className="py-2 px-4 border-b border-indigo-600">Area Manfaat</th>
+                <th className="py-2 px-4 border-b border-indigo-600">Obj Infra</th>
+              </tr>
+            </thead>
+            <tbody className='text-xs selection:bg-indigo-500 selection:text-white'>
+              {surveys.map((survey) => (
+                <tr key={survey.id} className="bg-gray-100 hover:bg-gray-200">
+                  <td className="py-2 px-4 border-b break-words max-w-40">{survey.id}</td>
+                  <td className="py-2 px-4 border-b">{new Date(survey.tanggalSurvey).toLocaleDateString()}</td>
+                  <td className="py-2 px-4 border-b">{survey.pic}</td>
+                  <td className="py-2 px-4 border-b">{survey.provinsi}</td>
+                  <td className="py-2 px-4 border-b break-words">{survey.kapri.join(', ')}</td>
+                  <td className="py-2 px-4 border-b">{survey.ditjen}</td>
+                  <td className="py-2 px-4 border-b">{survey.areaManfaat.join(', ')}</td>
+                  <td className="py-2 px-4 border-b break-words">{survey.objInfra}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      {/* </div> */}
     </div>
   );
 }

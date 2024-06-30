@@ -3,15 +3,18 @@
 import React, { useState, useEffect } from "react";
 import { FaChevronDown } from 'react-icons/fa';
 
+
 type ShortFieldProps = {
   title: string;
   desc? : string;
 	isDetail? : boolean;
 	children? : React.ReactNode;
+	placeholder? : string;
+	required?: boolean;
 	onChange: (input : string) => void;
 };
 
-const ShortField:React.FC<ShortFieldProps> = ({title, desc, isDetail, children, onChange}) => {
+const ShortField:React.FC<ShortFieldProps> = ({title, desc, isDetail, children, placeholder, required, onChange}) => {
 	const [drop, setDrop] = useState<boolean>(false);
 	const [shortInput, setShortInput] = useState<string>('');
 
@@ -67,11 +70,11 @@ const ShortField:React.FC<ShortFieldProps> = ({title, desc, isDetail, children, 
 					}
 				<input
 					name={title}
-					required={true}
+					required={required}
 					type="text"
 					value={shortInput}
 					onChange={handleInputChange}
-					placeholder='e.g. Ilham Maulana'
+					placeholder={placeholder}
 					className='border border-indigo-500/30 rounded-md outline-indigo-500 px-2 py-2 text-sm'
 				/>
 			</div>

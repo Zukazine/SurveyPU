@@ -9,7 +9,7 @@ const JudulEpic : React.FC<judul> = ({textNormal, textEmergency}) => {
 	return ( 
 		<>
 			<div className='min-[450px]:text-4xl text-2xl font-mono font-black text-black sm:mb-6 mb-4 ml-1'>
-				<span className='selection:text-indigo-500'>{textNormal} </span><span className='selection:text-red-400'>{textEmergency}</span>
+				<span className='selection:text-indigo-500'>{textNormal} </span><span className='selection:text-orange-400'>{textEmergency}</span>
 			</div>
 		</>
 	);
