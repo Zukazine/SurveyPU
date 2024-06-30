@@ -67,7 +67,7 @@ const ShowData: React.FC = () => {
   };
 
   return (
-    <div className="container mx-auto p-4">
+    <div className="container h-screen mx-auto p-4 overflow-hidden">
       <div className="flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-4 mb-4">
         <input
           type="date"
@@ -107,11 +107,11 @@ const ShowData: React.FC = () => {
         </button>
       </div>
       {/* <div className='flex flex-col border-2 border-black'> */}
-        <div className='flex flex-col border-4 border-red-800 w-full'>
-          <table className="relative max-w-full bg-white border">
+        <div className='flex flex-col w-full h-[90%] overflow-scroll myscrollbar-child'>
+          <table className="bg-white border">
             <thead className='text-xs bg-indigo-500 text-white'>
-              <tr>
-                <th className="py-2 px-4 border-b border-indigo-600 max-w-40">ID</th>
+              <tr className='w-40'>
+                <th className="py-2 px-4 border-b border-indigo-600">ID</th>
                 <th className="py-2 px-4 border-b border-indigo-600">Tanggal</th>
                 <th className="py-2 px-4 border-b border-indigo-600">PIC</th>
                 <th className="py-2 px-4 border-b border-indigo-600">Provinsi</th>
@@ -124,7 +124,7 @@ const ShowData: React.FC = () => {
             <tbody className='text-xs selection:bg-indigo-500 selection:text-white'>
               {surveys.map((survey) => (
                 <tr key={survey.id} className="bg-gray-100 hover:bg-gray-200">
-                  <td className="py-2 px-4 border-b break-words max-w-40">{survey.id}</td>
+                  <td className="py-2 px-4 border-b break-words">{survey.id}</td>
                   <td className="py-2 px-4 border-b">{new Date(survey.tanggalSurvey).toLocaleDateString()}</td>
                   <td className="py-2 px-4 border-b">{survey.pic}</td>
                   <td className="py-2 px-4 border-b">{survey.provinsi}</td>

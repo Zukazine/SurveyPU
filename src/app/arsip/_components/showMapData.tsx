@@ -14,7 +14,7 @@ const ShowMapData = () => {
   };
 
   return (
-    <div className="container mx-auto p-4">
+    <div className="container mx-auto p-4 h-screen overflow-y-scroll myscrollbar-child">
       <div className="mb-4">
         <input
           type="text"
@@ -28,7 +28,7 @@ const ShowMapData = () => {
         </button>
       </div>
       {surveyData ? (
-        <div>
+        <div className='flex flex-col '>
           <h2 className="text-xl mb-4">Geotagging Point</h2>
           {/* @ts-ignore */}
           <MapComponent geotagData={surveyData.geotagPoint} type="Point" />

@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState, useCallback } from 'react';
 import mapboxgl from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
-import { Map, NavigationControl, Source, Layer } from 'react-map-gl';
+import { Map, NavigationControl, Source, Layer, FullscreenControl  } from 'react-map-gl';
 
 const TOKEN = 'pk.eyJ1IjoienVrYXppbmUiLCJhIjoiY2x3ZzZhZnBlMDFqczJqbzc4cWRoa3huMCJ9.NMAXOL6N04GuU6zcwz77Hw';
 
@@ -129,6 +129,7 @@ const MapComponent = ({ geotagData, type }) => {
           style={{ width: '100%', height: '100%' }}
         >
           <NavigationControl position="top-right" />
+          <FullscreenControl position="top-left" />
         </Map>
       ) : (
         <div className="w-full h-full flex items-center justify-center bg-gray-100">
