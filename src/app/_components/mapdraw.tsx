@@ -65,7 +65,7 @@ const MapDraw: React.FC<MapFieldProps> = ({ id, initialGeoJsonData, onChange, ty
               point: true,
               trash: true,
             },
-            styles: drawStyles
+            // styles: drawStyles
           });
           
           drawRef.current = draw;
@@ -77,7 +77,7 @@ const MapDraw: React.FC<MapFieldProps> = ({ id, initialGeoJsonData, onChange, ty
               line_string: true,
               trash: true,
             },
-            styles: drawStyles
+            // styles: drawStyles
           });
           
           drawRef.current = draw;
@@ -89,7 +89,7 @@ const MapDraw: React.FC<MapFieldProps> = ({ id, initialGeoJsonData, onChange, ty
               polygon: true,
               trash: true,
             },
-            styles: drawStyles
+            // styles: 
           });
           
           drawRef.current = draw;
@@ -103,7 +103,7 @@ const MapDraw: React.FC<MapFieldProps> = ({ id, initialGeoJsonData, onChange, ty
               line_string: true,
               trash: true,
             },
-            styles: drawStyles
+            // styles: drawStyles
           });
           
           drawRef.current = draw;
@@ -245,10 +245,6 @@ export const drawStyles = [
     'id': 'gl-draw-line-inactive',
     'type': 'line',
     'filter': ['all', ['==', '$type', 'LineString'], ['==', 'meta', 'feature']],
-    'layout': {
-      'line-cap': 'round',
-      'line-join': 'round'
-    },
     'paint': {
       'line-color': '#ff0000',
       'line-width': 2
@@ -258,13 +254,9 @@ export const drawStyles = [
     'id': 'gl-draw-line-active',
     'type': 'line',
     'filter': ['all', ['==', '$type', 'LineString'], ['==', 'meta', 'feature'], ['==', 'active', 'true']],
-    'layout': {
-      'line-cap': 'round',
-      'line-join': 'round'
-    },
     'paint': {
       'line-color': '#ff0000',
-      'line-width': 4
+      'line-width': 4,
     }
   },
   // Polygon
@@ -290,10 +282,6 @@ export const drawStyles = [
     'id': 'gl-draw-polygon-stroke-inactive',
     'type': 'line',
     'filter': ['all', ['==', '$type', 'Polygon'], ['==', 'meta', 'feature']],
-    'layout': {
-      'line-cap': 'round',
-      'line-join': 'round'
-    },
     'paint': {
       'line-color': '#ff0000',
       'line-width': 2
@@ -303,10 +291,6 @@ export const drawStyles = [
     'id': 'gl-draw-polygon-stroke-active',
     'type': 'line',
     'filter': ['all', ['==', '$type', 'Polygon'], ['==', 'meta', 'feature'], ['==', 'active', 'true']],
-    'layout': {
-      'line-cap': 'round',
-      'line-join': 'round'
-    },
     'paint': {
       'line-color': '#ff0000',
       'line-width': 4
