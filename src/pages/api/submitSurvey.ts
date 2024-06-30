@@ -4,6 +4,7 @@ import { PrismaClient } from '@prisma/client';
 const prisma = new PrismaClient();
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+  console.log('Req method : ',req.method)
   if (req.method === 'POST') {
     const {
       tanggalSurvey,
