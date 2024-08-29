@@ -10,7 +10,25 @@ const MapComponent = ({ geotagData, type }) => {
   const mapRef = useRef(null);
   const [mapLoaded, setMapLoaded] = useState(false);
   const [markers, setMarkers] = useState([]);
-  const [mapStyle, setMapStyle] = useState('mapbox://styles/mapbox/navigation-night-v1');
+  const [mapStyle, setMapStyle] = useState({
+    version: 8,
+    sources: {
+      'google-hybrid': {
+        type: 'raster',
+        tiles: ['https://mt1.google.com/vt/lyrs=y&x={x}&y={y}&z={z}'],
+        tileSize: 256,
+      },
+    },
+    layers: [
+      {
+        id: 'google-hybrid',
+        type: 'raster',
+        source: 'google-hybrid',
+        minzoom: 0,
+        maxzoom: 22,
+      },
+    ],
+  });
 
   useEffect(() => {
     // @ts-ignore
@@ -109,77 +127,30 @@ const MapComponent = ({ geotagData, type }) => {
     setMapLoaded(true);
   }, []);
 
-  const handleStyleChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    const selectedStyle = event.target.value;
-    if (selectedStyle === 'google-hybrid') {
-      const map = mapRef.current?.getMap();
-      map.setStyle({
-        version: 8,
-        sources: {
-          'google-hybrid': {
-            type: 'raster',
-            tiles: [
-              'https://mt1.google.com/vt/lyrs=y&x={x}&y={y}&z={z}'
-            ],
-            tileSize: 256,
-          },
-        },
-        layers: [
-          {
-            id: 'google-hybrid',
-            type: 'raster',
-            source: 'google-hybrid',
-            minzoom: 0,
-            maxzoom: 22,
-          },
-        ],
-      });
-    } else {
-      setMapStyle(`mapbox://styles/mapbox/${selectedStyle}`);
-    }
-  };
-
   return (
-    <>
-      <div className='my-5'>
-        <p className='font-semibold w-full text-wrap text-md mb-3 mt-3'>Ganti Style Peta</p>
-        <select
-          id="mapStyle"
-          onChange={handleStyleChange}
-          className='border border-indigo-500/30 rounded-md outline-indigo-500 px-2 sm:px-3 py-1 sm:py-2 text-xs sm:text-sm hover:border-indigo-500/80 w-full text-wrap'
+    <div className="w-full h-96">
+      {geotagData && geotagData.features && geotagData.features.length > 0 ? (
+        <Map
+          ref={mapRef}
+          mapboxAccessToken={TOKEN}
+          mapStyle={mapStyle}
+          initialViewState={{
+            longitude: 106.8272,
+            latitude: -6.1751,
+            zoom: 5,
+          }}
+          onLoad={onMapLoad}
+          style={{ width: '100%', height: '100%' }}
         >
-          <option value="navigation-night-v1">Navigation</option>
-          <option value="streets-v12">Streets</option>
-          <option value="satellite-streets-v12">Satellite</option>
-          <option value="outdoors-v12">Outdoors</option>
-          <option value="google-hybrid">Google Hybrid</option>
-        </select>
-      </div>
-
-      <div className="w-full h-96">
-        {geotagData && geotagData.features && geotagData.features.length > 0 ? (
-          <Map
-            ref={mapRef}
-            mapboxAccessToken={TOKEN}
-            mapStyle={mapStyle}
-            initialViewState={{
-              longitude: 106.8272,
-              latitude: -6.1751,
-              zoom: 5,
-            }}
-            onLoad={onMapLoad}
-            style={{ width: '100%', height: '100%' }}
-          >
-            <NavigationControl position="top-right" />
-            <FullscreenControl position="top-left" />
-          </Map>
-        ) : (
-          <div className="w-full h-full flex items-center justify-center bg-gray-100">
-            <p>No geotag {type.toLowerCase()} information available</p>
-          </div>
-        )}
-      </div>
-    </>
+          <NavigationControl position="top-right" />
+          <FullscreenControl position="top-left" />
+        </Map>
+      ) : (
+        <div className="w-full h-full flex items-center justify-center bg-gray-100">
+          <p>No geotag {type.toLowerCase()} information available</p>
+        </div>
+      )}
+    </div>
   );
 };
 

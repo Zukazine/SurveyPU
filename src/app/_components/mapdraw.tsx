@@ -221,7 +221,7 @@ export const drawStyles = [
     'filter': ['all', ['==', '$type', 'Point'], ['==', 'meta', 'feature']],
     'paint': {
       'circle-radius': 5,
-      'circle-color': '#ff0000'
+      'circle-color': '#ff0000',
     }
   },
   {
@@ -256,7 +256,7 @@ export const drawStyles = [
     },
     'paint': {
       'line-color': '#ff0000',
-      'line-width': 4
+      'line-width': 2
     }
   },
   {
@@ -264,8 +264,8 @@ export const drawStyles = [
     'type': 'fill',
     'filter': ['all', ['==', '$type', 'Polygon'], ['==', 'meta', 'feature']],
     'paint': {
-      'fill-color': '#ff0000',
-      'fill-opacity': 0.5
+      'fill-color': '#0000ff',
+      'fill-opacity': 0.2
     }
   },
   {
@@ -273,8 +273,8 @@ export const drawStyles = [
     'type': 'fill',
     'filter': ['all', ['==', '$type', 'Polygon'], ['==', 'meta', 'feature'], ['==', 'active', 'true']],
     'paint': {
-      'fill-color': '#ff0000',
-      'fill-opacity': 0.7
+      'fill-color': '#00ffff',
+      'fill-opacity': 0.3
     }
   },
   {
@@ -286,7 +286,7 @@ export const drawStyles = [
       'line-join': 'round'
     },
     'paint': {
-      'line-color': '#ff0000',
+      'line-color': '#0000ff',
       'line-width': 2
     }
   },
@@ -299,8 +299,8 @@ export const drawStyles = [
       'line-join': 'round'
     },
     'paint': {
-      'line-color': '#ff0000',
-      'line-width': 4
+      'line-color': '#0000ff',
+      'line-width': 2
     }
   }
 ];
