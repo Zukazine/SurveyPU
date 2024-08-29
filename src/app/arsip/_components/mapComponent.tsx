@@ -35,7 +35,7 @@ const MapComponent = ({ geotagData, type }) => {
     const map = mapRef.current?.getMap();
 
     if (mapLoaded && map) {
-      // Clear previous layers 
+      // @ts-ignore
       markers.forEach(marker => marker.remove());
       setMarkers([]);
 
@@ -54,6 +54,7 @@ const MapComponent = ({ geotagData, type }) => {
 
       // Remove all point layers
       const layers = map.getStyle().layers;
+      // @ts-ignore
       layers.forEach(layer => {
         if (layer.id.startsWith('point')) {
           if (map.getLayer(layer.id)) {
@@ -71,6 +72,7 @@ const MapComponent = ({ geotagData, type }) => {
       }
 
       if (type === 'Point') {
+        // @ts-ignore
         const newMarkers = geotagData.features.map((feature, index) => {
           const marker = new mapboxgl.Marker()
             .setLngLat(feature.geometry.coordinates)
@@ -112,10 +114,12 @@ const MapComponent = ({ geotagData, type }) => {
       }
 
       const bounds = new mapboxgl.LngLatBounds();
+      // @ts-ignore
       geotagData.features.forEach((feature) => {
         if (feature.geometry.type === 'Point') {
           bounds.extend(feature.geometry.coordinates);
         } else if (feature.geometry.type === 'LineString' || feature.geometry.type === 'Polygon') {
+          // @ts-ignore
           feature.geometry.coordinates.forEach((coord) => bounds.extend(coord));
         }
       });
@@ -133,6 +137,7 @@ const MapComponent = ({ geotagData, type }) => {
         <Map
           ref={mapRef}
           mapboxAccessToken={TOKEN}
+          // @ts-ignore
           mapStyle={mapStyle}
           initialViewState={{
             longitude: 106.8272,
