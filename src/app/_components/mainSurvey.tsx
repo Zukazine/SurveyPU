@@ -198,10 +198,10 @@ const MainSurvey = () => {
 						</div>
 
 						<div className='flex flex-col items-center justify-center py-4 gap-[30px]'>
+							{/* <div className='rounded-full bg-indigo-500 h-6 w-6 shadow-inner [box-shadow:inset_3px_2px_1px_rgba(255,255,255,1)] border-2 border-indigo-500 rotate-180'/> */}
+							{/* <div className='rounded-full bg-indigo-500 h-6 w-6 shadow-inner [box-shadow:inset_3px_2px_1px_rgba(255,255,255,1)] border-2 border-indigo-500 rotate-180'/>
 							<div className='rounded-full bg-indigo-500 h-6 w-6 shadow-inner [box-shadow:inset_3px_2px_1px_rgba(255,255,255,1)] border-2 border-indigo-500 rotate-180'/>
-							<div className='rounded-full bg-indigo-500 h-6 w-6 shadow-inner [box-shadow:inset_3px_2px_1px_rgba(255,255,255,1)] border-2 border-indigo-500 rotate-180'/>
-							<div className='rounded-full bg-indigo-500 h-6 w-6 shadow-inner [box-shadow:inset_3px_2px_1px_rgba(255,255,255,1)] border-2 border-indigo-500 rotate-180'/>
-							<div className='rounded-full bg-indigo-500 h-6 w-6 shadow-inner [box-shadow:inset_3px_2px_1px_rgba(255,255,255,1)] border-2 border-indigo-500 rotate-180'/>
+							<div className='rounded-full bg-indigo-500 h-6 w-6 shadow-inner [box-shadow:inset_3px_2px_1px_rgba(255,255,255,1)] border-2 border-indigo-500 rotate-180'/> */}
 						</div>
 
 						<ShortField

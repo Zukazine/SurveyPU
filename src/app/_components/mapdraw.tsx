@@ -23,10 +23,9 @@ const MapDraw: React.FC<MapFieldProps> = ({ id, initialGeoJsonData, onChange, ty
   const mapContainerRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<mapboxgl.Map | null>(null);
   const drawRef = useRef<MapboxDraw | null>(null);
-  // const [is500px, setIs500px] = useState(window.matchMedia("(max-width: 500px)").matches);
   const [is500px, setIs500px] = useState(false);
   const [geoJsonData, setGeoJsonData] = useState<GeoJSON.FeatureCollection<GeoJSON.Geometry>>(initialGeoJsonData);
-
+  const [coordinates, setCoordinates] = useState<string>('');
   const defaultCenter = [113.9213, 0.7893];
   const defaultZoom = 5;
 
@@ -49,7 +48,7 @@ const MapDraw: React.FC<MapFieldProps> = ({ id, initialGeoJsonData, onChange, ty
       if (!mapRef.current) {
         const map = new mapboxgl.Map({
           container: mapContainerRef.current!,
-          style: 'mapbox://styles/mapbox/streets-v11',
+          style: 'mapbox://styles/mapbox/navigation-night-v1',
           // @ts-ignore
           center: defaultCenter,
           zoom: defaultZoom,
@@ -191,16 +190,49 @@ const MapDraw: React.FC<MapFieldProps> = ({ id, initialGeoJsonData, onChange, ty
     };
   }, []);
 
+  const handleCoordinateSearch = () => {
+    const [lat, lng] = coordinates.split(',').map(coord => parseFloat(coord.trim()));
+
+    if (mapRef.current && !isNaN(lat) && !isNaN(lng)) {
+      mapRef.current.flyTo({
+        center: [lng, lat],
+        essential: true,
+        zoom: 12,
+      });
+    } else {
+      alert('Invalid coordinates. Please enter valid latitude and longitude.');
+    }
+  };
+
+
 	return (
 		<>
 			<div ref={mapContainerRef} style={{ width: '100%', height: '500px' }} />
       <div>
         <p className='font-semibold w-full text-wrap text-md mb-3 mt-3'>Ganti Style Peta</p>
         <select id="mapStyle" onChange={handleStyleChange} className='border border-indigo-500/30 rounded-md outline-indigo-500 px-2 sm:px-3 py-1 sm:py-2 text-xs sm:text-sm hover:border-indigo-500/80 w-full text-wrap'>
-          <option value="streets-v11">Streets</option>
-          <option value="satellite-v9">Satellite</option>
-          <option value="light-v10">Light</option>
+          <option value="navigation-night-v1">Navigation</option>
+          <option value="streets-v12">Streets</option>
+          <option value="satellite-streets-v12">Sattelite</option>
+          <option value="outdoors-v12">Outdoors</option>
         </select>
+      </div>
+      <div>
+        <p className='font-semibold w-full text-wrap text-md mb-3 mt-3'>Cari via koordinat</p>
+        <input 
+          type="text" 
+          value={coordinates}
+          onChange={(e) => setCoordinates(e.target.value)} 
+          placeholder="-6.246219380289081, 106.78173827163099"
+          className='border border-indigo-500/30 rounded-md outline-indigo-500 px-2 sm:px-3 py-1 sm:py-2 text-xs sm:text-sm hover:border-indigo-500/80 w-full text-wrap mb-3'
+        />
+        <button 
+          onClick={handleCoordinateSearch}
+          type='button'
+          className='bg-indigo-500 text-white px-4 py-2 rounded-md hover:bg-indigo-600'
+        >
+          Zoom to Coordinate
+        </button>
       </div>
       <p className='font-semibold w-full text-wrap text-md mb-3 mt-4'>Preview Data Spasial </p>
       <div className='flex border border-indigo-500/50 rounded-lg max-h-[500px] overflow-y-scroll myscrollbar-child'>
