@@ -25,7 +25,7 @@ const MapDraw: React.FC<MapFieldProps> = ({ id, initialGeoJsonData, onChange, ty
   const [coordinates, setCoordinates] = useState<string>('');
   const [is500px, setIs500px] = useState(false);
   const [mapStyle, setMapStyle] = useState('mapbox://styles/mapbox/navigation-night-v1');
-  const defaultCenter = [113.9213, 0.7893];
+  const defaultCenter:  [number, number] = [113.9213, 0.7893];
   const defaultZoom = 5;
 
   useEffect(() => {
