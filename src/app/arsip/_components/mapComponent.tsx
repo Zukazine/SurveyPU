@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState, useCallback } from 'react';
 import mapboxgl from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
-import { Map, NavigationControl, Source, Layer, FullscreenControl  } from 'react-map-gl';
+import { Map, NavigationControl, FullscreenControl } from 'react-map-gl';
 
 const TOKEN = 'pk.eyJ1IjoienVrYXppbmUiLCJhIjoiY2x3ZzZhZnBlMDFqczJqbzc4cWRoa3huMCJ9.NMAXOL6N04GuU6zcwz77Hw';
 
@@ -10,14 +10,14 @@ const MapComponent = ({ geotagData, type }) => {
   const mapRef = useRef(null);
   const [mapLoaded, setMapLoaded] = useState(false);
   const [markers, setMarkers] = useState([]);
+  const [mapStyle, setMapStyle] = useState('mapbox://styles/mapbox/navigation-night-v1');
 
   useEffect(() => {
     // @ts-ignore
     const map = mapRef.current?.getMap();
 
     if (mapLoaded && map) {
-      // Clear previous layers
-      // @ts-ignore
+      // Clear previous layers 
       markers.forEach(marker => marker.remove());
       setMarkers([]);
 
@@ -36,7 +36,6 @@ const MapComponent = ({ geotagData, type }) => {
 
       // Remove all point layers
       const layers = map.getStyle().layers;
-      // @ts-ignore
       layers.forEach(layer => {
         if (layer.id.startsWith('point')) {
           if (map.getLayer(layer.id)) {
@@ -54,7 +53,6 @@ const MapComponent = ({ geotagData, type }) => {
       }
 
       if (type === 'Point') {
-        // @ts-ignore
         const newMarkers = geotagData.features.map((feature, index) => {
           const marker = new mapboxgl.Marker()
             .setLngLat(feature.geometry.coordinates)
@@ -96,12 +94,10 @@ const MapComponent = ({ geotagData, type }) => {
       }
 
       const bounds = new mapboxgl.LngLatBounds();
-      // @ts-ignore
       geotagData.features.forEach((feature) => {
         if (feature.geometry.type === 'Point') {
           bounds.extend(feature.geometry.coordinates);
         } else if (feature.geometry.type === 'LineString' || feature.geometry.type === 'Polygon') {
-          // @ts-ignore
           feature.geometry.coordinates.forEach((coord) => bounds.extend(coord));
         }
       });
@@ -113,30 +109,77 @@ const MapComponent = ({ geotagData, type }) => {
     setMapLoaded(true);
   }, []);
 
+  const handleStyleChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    const selectedStyle = event.target.value;
+    if (selectedStyle === 'google-hybrid') {
+      const map = mapRef.current?.getMap();
+      map.setStyle({
+        version: 8,
+        sources: {
+          'google-hybrid': {
+            type: 'raster',
+            tiles: [
+              'https://mt1.google.com/vt/lyrs=y&x={x}&y={y}&z={z}'
+            ],
+            tileSize: 256,
+          },
+        },
+        layers: [
+          {
+            id: 'google-hybrid',
+            type: 'raster',
+            source: 'google-hybrid',
+            minzoom: 0,
+            maxzoom: 22,
+          },
+        ],
+      });
+    } else {
+      setMapStyle(`mapbox://styles/mapbox/${selectedStyle}`);
+    }
+  };
+
   return (
-    <div className="w-full h-96">
-      {geotagData && geotagData.features && geotagData.features.length > 0 ? (
-        <Map
-          ref={mapRef}
-          mapboxAccessToken={TOKEN}
-          mapStyle="mapbox://styles/mapbox/streets-v11"
-          initialViewState={{
-            longitude: 106.8272,
-            latitude: -6.1751,
-            zoom: 5,
-          }}
-          onLoad={onMapLoad}
-          style={{ width: '100%', height: '100%' }}
+    <>
+      <div className='my-5'>
+        <p className='font-semibold w-full text-wrap text-md mb-3 mt-3'>Ganti Style Peta</p>
+        <select
+          id="mapStyle"
+          onChange={handleStyleChange}
+          className='border border-indigo-500/30 rounded-md outline-indigo-500 px-2 sm:px-3 py-1 sm:py-2 text-xs sm:text-sm hover:border-indigo-500/80 w-full text-wrap'
         >
-          <NavigationControl position="top-right" />
-          <FullscreenControl position="top-left" />
-        </Map>
-      ) : (
-        <div className="w-full h-full flex items-center justify-center bg-gray-100">
-          <p>No geotag {type.toLowerCase()} information available</p>
-        </div>
-      )}
-    </div>
+          <option value="navigation-night-v1">Navigation</option>
+          <option value="streets-v12">Streets</option>
+          <option value="satellite-streets-v12">Satellite</option>
+          <option value="outdoors-v12">Outdoors</option>
+          <option value="google-hybrid">Google Hybrid</option>
+        </select>
+      </div>
+
+      <div className="w-full h-96">
+        {geotagData && geotagData.features && geotagData.features.length > 0 ? (
+          <Map
+            ref={mapRef}
+            mapboxAccessToken={TOKEN}
+            mapStyle={mapStyle}
+            initialViewState={{
+              longitude: 106.8272,
+              latitude: -6.1751,
+              zoom: 5,
+            }}
+            onLoad={onMapLoad}
+            style={{ width: '100%', height: '100%' }}
+          >
+            <NavigationControl position="top-right" />
+            <FullscreenControl position="top-left" />
+          </Map>
+        ) : (
+          <div className="w-full h-full flex items-center justify-center bg-gray-100">
+            <p>No geotag {type.toLowerCase()} information available</p>
+          </div>
+        )}
+      </div>
+    </>
   );
 };
 

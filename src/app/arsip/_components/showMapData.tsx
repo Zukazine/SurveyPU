@@ -1,11 +1,13 @@
 'use client'
 
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import MapComponent from './mapComponent';
 
 const ShowMapData = () => {
   const [surveyId, setSurveyId] = useState('');
   const [surveyData, setSurveyData] = useState(null);
+  const [style, setStyle] = useState('');
+  const mapRef = useRef<mapboxgl.Map | null>(null);
 
   const fetchSurveyData = async () => {
     const response = await fetch(`/api/surveys/${surveyId}`);
@@ -27,20 +29,21 @@ const ShowMapData = () => {
           Show Map
         </button>
       </div>
+      
       {surveyData ? (
         <div className='flex flex-col '>
           <h2 className="text-xl mb-4">Geotagging Point</h2>
           {/* @ts-ignore */}
-          <MapComponent geotagData={surveyData.geotagPoint} type="Point" />
+          <MapComponent geotagData={surveyData.geotagPoint} type="Point"/>
           <h2 className="text-xl mt-8 mb-4">Geotagging Line</h2>
           {/* @ts-ignore */}
-          <MapComponent geotagData={surveyData.geotagLine} type="LineString" />
+          <MapComponent geotagData={surveyData.geotagLine} type="LineString"/>
           <h2 className="text-xl mt-8 mb-4">Geotagging Area Infrastruktur</h2>
           {/* @ts-ignore */}
-          <MapComponent geotagData={surveyData.geotagAreaInfra} type="Polygon" />
+          <MapComponent geotagData={surveyData.geotagAreaInfra} type="Polygon"/>
           <h2 className="text-xl mt-8 mb-4">Geotagging Area Manfaat</h2>
           {/* @ts-ignore */}
-          <MapComponent geotagData={surveyData.geotagAreaManf} type="Polygon" />
+          <MapComponent geotagData={surveyData.geotagAreaManf} type="Polygon"/>
         </div>
       ) : (
         <p className='text-[13px] font-mono'>No survey data available. Please enter a valid survey ID.</p>

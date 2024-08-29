@@ -1,31 +1,30 @@
-// GLOBAL
 import React, { useRef, useEffect, useState } from 'react';
 import mapboxgl from 'mapbox-gl';
 import MapboxDraw from '@mapbox/mapbox-gl-draw';
 import MapboxGeocoder from '@mapbox/mapbox-gl-geocoder';
 
-// CSS
 import 'mapbox-gl/dist/mapbox-gl.css';
 import '@mapbox/mapbox-gl-draw/dist/mapbox-gl-draw.css';
 import '@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css';
 
-mapboxgl.accessToken = 'pk.eyJ1IjoienVrYXppbmUiLCJhIjoiY2x3ZzZhZnBlMDFqczJqbzc4cWRoa3huMCJ9.NMAXOL6N04GuU6zcwz77Hw'
+mapboxgl.accessToken = 'pk.eyJ1IjoienVrYXppbmUiLCJhIjoiY2x3ZzZhZnBlMDFqczJqbzc4cWRoa3huMCJ9.NMAXOL6N04GuU6zcwz77Hw';
 
 type MapFieldProps = {
   id: string;
   initialGeoJsonData: GeoJSON.FeatureCollection<GeoJSON.Geometry>;
-  onChange: (id : string, input: GeoJSON.GeoJsonObject | null) => void;
+  onChange: (id: string, input: GeoJSON.GeoJsonObject | null) => void;
   type?: string;
-  complex? : boolean;
+  complex?: boolean;
 }
 
 const MapDraw: React.FC<MapFieldProps> = ({ id, initialGeoJsonData, onChange, type, complex }) => {
   const mapContainerRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<mapboxgl.Map | null>(null);
   const drawRef = useRef<MapboxDraw | null>(null);
-  const [is500px, setIs500px] = useState(false);
   const [geoJsonData, setGeoJsonData] = useState<GeoJSON.FeatureCollection<GeoJSON.Geometry>>(initialGeoJsonData);
   const [coordinates, setCoordinates] = useState<string>('');
+  const [is500px, setIs500px] = useState(false);
+  const [mapStyle, setMapStyle] = useState('mapbox://styles/mapbox/navigation-night-v1');
   const defaultCenter = [113.9213, 0.7893];
   const defaultZoom = 5;
 
@@ -48,68 +47,27 @@ const MapDraw: React.FC<MapFieldProps> = ({ id, initialGeoJsonData, onChange, ty
       if (!mapRef.current) {
         const map = new mapboxgl.Map({
           container: mapContainerRef.current!,
-          style: 'mapbox://styles/mapbox/navigation-night-v1',
-          // @ts-ignore
+          style: mapStyle,
           center: defaultCenter,
           zoom: defaultZoom,
         });
 
         mapRef.current = map;
 
-        // DRAW
-        if (type === 'point') {
-          const draw = new MapboxDraw({
-            displayControlsDefault: false,
-            controls: {
-              point: true,
-              trash: true,
-            },
-            // styles: drawStyles
-          });
-          
-          drawRef.current = draw;
-          map.addControl(draw);
-        } else if (type === 'line') {
-          const draw = new MapboxDraw({
-            displayControlsDefault: false,
-            controls: {
-              line_string: true,
-              trash: true,
-            },
-            // styles: drawStyles
-          });
-          
-          drawRef.current = draw;
-          map.addControl(draw);
-        } else if (type === 'polygon'){
-          const draw = new MapboxDraw({
-            displayControlsDefault: false,
-            controls: {
-              polygon: true,
-              trash: true,
-            },
-            // styles: 
-          });
-          
-          drawRef.current = draw;
-          map.addControl(draw);
-        } else {
-          const draw = new MapboxDraw({
-            displayControlsDefault: false,
-            controls: {
-              polygon: true,
-              point: true,
-              line_string: true,
-              trash: true,
-            },
-            // styles: drawStyles
-          });
-          
-          drawRef.current = draw;
-          map.addControl(draw);
-        }
+        const draw = new MapboxDraw({
+          displayControlsDefault: false,
+          controls: {
+            point: type === 'point' || !type,
+            line_string: type === 'line' || !type,
+            polygon: type === 'polygon' || !type,
+            trash: true,
+          },
+          styles: drawStyles
+        });
 
-        // GEOCODER
+        drawRef.current = draw;
+        map.addControl(draw);
+
         const geocoder = new MapboxGeocoder({
           accessToken: mapboxgl.accessToken,
           mapboxgl: mapboxgl,
@@ -119,11 +77,9 @@ const MapDraw: React.FC<MapFieldProps> = ({ id, initialGeoJsonData, onChange, ty
 
         map.addControl(geocoder, 'top-left');
 
-        // FULLSCREEN
         const fullscreenControl = new mapboxgl.FullscreenControl();
         map.addControl(fullscreenControl, 'top-left');
 
-        // GEOLOCATE
         const geolocateControl = new mapboxgl.GeolocateControl({
           positionOptions: {
             enableHighAccuracy: true,
@@ -155,7 +111,6 @@ const MapDraw: React.FC<MapFieldProps> = ({ id, initialGeoJsonData, onChange, ty
     };
 
     const updateArea = () => {
-      // @ts-ignore
       const data = drawRef.current?.getAll();
       if (data) {
         setGeoJsonData(data);
@@ -165,30 +120,37 @@ const MapDraw: React.FC<MapFieldProps> = ({ id, initialGeoJsonData, onChange, ty
 
     initializeMap();
 
-  }, [id, onChange, defaultCenter, type]);
+  }, [id, onChange, defaultCenter, type, mapStyle]);
 
-  
-	const handleStyleChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-		const newStyle = event.target.value;
-		if (mapRef.current) { 
-			mapRef.current.setStyle(`mapbox://styles/mapbox/${newStyle}`);
-		}
-		};
-
-  useEffect(() => {
-    const mediaQuery = window.matchMedia("(max-width: 640px)");
-
-    // @ts-ignore
-    const handleMediaQueryChange = (e) => {
-      setIs500px(e.matches);
-    };
-
-    mediaQuery.addEventListener('change', handleMediaQueryChange);
-
-    return () => {
-      mediaQuery.removeEventListener('change', handleMediaQueryChange);
-    };
-  }, []);
+  const handleStyleChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    const selectedStyle = event.target.value;
+    if (selectedStyle === 'google-hybrid') {
+      const map = mapRef.current;
+      map?.setStyle({
+        version: 8,
+        sources: {
+          'google-hybrid': {
+            type: 'raster',
+            tiles: [
+              'https://mt1.google.com/vt/lyrs=y&x={x}&y={y}&z={z}'
+            ],
+            tileSize: 256,
+          },
+        },
+        layers: [
+          {
+            id: 'google-hybrid',
+            type: 'raster',
+            source: 'google-hybrid',
+            minzoom: 0,
+            maxzoom: 22,
+          },
+        ],
+      });
+    } else {
+      setMapStyle(`mapbox://styles/mapbox/${selectedStyle}`);
+    }
+  };
 
   const handleCoordinateSearch = () => {
     const [lat, lng] = coordinates.split(',').map(coord => parseFloat(coord.trim()));
@@ -197,36 +159,36 @@ const MapDraw: React.FC<MapFieldProps> = ({ id, initialGeoJsonData, onChange, ty
       mapRef.current.flyTo({
         center: [lng, lat],
         essential: true,
-        zoom: 12,
+        zoom: 15,
       });
     } else {
       alert('Invalid coordinates. Please enter valid latitude and longitude.');
     }
   };
 
-
-	return (
-		<>
-			<div ref={mapContainerRef} style={{ width: '100%', height: '500px' }} />
+  return (
+    <>
+      <div ref={mapContainerRef} style={{ width: '100%', height: '500px' }} />
       <div>
         <p className='font-semibold w-full text-wrap text-md mb-3 mt-3'>Ganti Style Peta</p>
         <select id="mapStyle" onChange={handleStyleChange} className='border border-indigo-500/30 rounded-md outline-indigo-500 px-2 sm:px-3 py-1 sm:py-2 text-xs sm:text-sm hover:border-indigo-500/80 w-full text-wrap'>
           <option value="navigation-night-v1">Navigation</option>
           <option value="streets-v12">Streets</option>
-          <option value="satellite-streets-v12">Sattelite</option>
+          <option value="satellite-streets-v12">Satellite</option>
           <option value="outdoors-v12">Outdoors</option>
+          <option value="google-hybrid">Google Hybrid</option>
         </select>
       </div>
       <div>
         <p className='font-semibold w-full text-wrap text-md mb-3 mt-3'>Cari via koordinat</p>
-        <input 
-          type="text" 
+        <input
+          type="text"
           value={coordinates}
-          onChange={(e) => setCoordinates(e.target.value)} 
+          onChange={(e) => setCoordinates(e.target.value)}
           placeholder="-6.246219380289081, 106.78173827163099"
           className='border border-indigo-500/30 rounded-md outline-indigo-500 px-2 sm:px-3 py-1 sm:py-2 text-xs sm:text-sm hover:border-indigo-500/80 w-full text-wrap mb-3'
         />
-        <button 
+        <button
           onClick={handleCoordinateSearch}
           type='button'
           className='bg-indigo-500 text-white px-4 py-2 rounded-md hover:bg-indigo-600'
@@ -234,26 +196,25 @@ const MapDraw: React.FC<MapFieldProps> = ({ id, initialGeoJsonData, onChange, ty
           Zoom to Coordinate
         </button>
       </div>
-      <p className='font-semibold w-full text-wrap text-md mb-3 mt-4'>Preview Data Spasial </p>
+      <p className='font-semibold w-full text-wrap text-md mb-3 mt-4'>Preview Data Spasial</p>
       <div className='flex border border-indigo-500/50 rounded-lg max-h-[500px] overflow-y-scroll myscrollbar-child'>
         {is500px ? (
-        <div>
-          <p className='m-5 pb-5 text-sm text-wrap'>{JSON.stringify(geoJsonData, null, 2)}</p>
-        </div>
-      ) : (
-        <div>
-          <pre className='m-5 pb-5 text-sm'>{JSON.stringify(geoJsonData, null, 2)}</pre>
-        </div>
-      )}
+          <div>
+            <p className='m-5 pb-5 text-sm text-wrap'>{JSON.stringify(geoJsonData, null, 2)}</p>
+          </div>
+        ) : (
+          <div>
+            <pre className='m-5 pb-5 text-sm'>{JSON.stringify(geoJsonData, null, 2)}</pre>
+          </div>
+        )}
       </div>
-		</>
-	);
+    </>
+  );
 };
-  
+
 export default MapDraw;
 
 export const drawStyles = [
-  // Point
   {
     'id': 'gl-draw-point-inactive',
     'type': 'circle',
@@ -272,11 +233,14 @@ export const drawStyles = [
       'circle-color': '#ff0000'
     }
   },
-  // Line
   {
     'id': 'gl-draw-line-inactive',
     'type': 'line',
     'filter': ['all', ['==', '$type', 'LineString'], ['==', 'meta', 'feature']],
+    'layout': {
+      'line-cap': 'round',
+      'line-join': 'round'
+    },
     'paint': {
       'line-color': '#ff0000',
       'line-width': 2
@@ -286,19 +250,22 @@ export const drawStyles = [
     'id': 'gl-draw-line-active',
     'type': 'line',
     'filter': ['all', ['==', '$type', 'LineString'], ['==', 'meta', 'feature'], ['==', 'active', 'true']],
+    'layout': {
+      'line-cap': 'round',
+      'line-join': 'round'
+    },
     'paint': {
       'line-color': '#ff0000',
-      'line-width': 4,
+      'line-width': 4
     }
   },
-  // Polygon
   {
     'id': 'gl-draw-polygon-fill-inactive',
     'type': 'fill',
     'filter': ['all', ['==', '$type', 'Polygon'], ['==', 'meta', 'feature']],
     'paint': {
       'fill-color': '#ff0000',
-      'fill-opacity': 0.1
+      'fill-opacity': 0.5
     }
   },
   {
@@ -307,13 +274,17 @@ export const drawStyles = [
     'filter': ['all', ['==', '$type', 'Polygon'], ['==', 'meta', 'feature'], ['==', 'active', 'true']],
     'paint': {
       'fill-color': '#ff0000',
-      'fill-opacity': 0.1
+      'fill-opacity': 0.7
     }
   },
   {
     'id': 'gl-draw-polygon-stroke-inactive',
     'type': 'line',
     'filter': ['all', ['==', '$type', 'Polygon'], ['==', 'meta', 'feature']],
+    'layout': {
+      'line-cap': 'round',
+      'line-join': 'round'
+    },
     'paint': {
       'line-color': '#ff0000',
       'line-width': 2
@@ -323,6 +294,10 @@ export const drawStyles = [
     'id': 'gl-draw-polygon-stroke-active',
     'type': 'line',
     'filter': ['all', ['==', '$type', 'Polygon'], ['==', 'meta', 'feature'], ['==', 'active', 'true']],
+    'layout': {
+      'line-cap': 'round',
+      'line-join': 'round'
+    },
     'paint': {
       'line-color': '#ff0000',
       'line-width': 4
